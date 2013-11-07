@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<script>
+
+var board = new Array();
+
+var resetRequest = false;
+
+function handleHttpResponse() {
+	  // response=4 means server completed request
+	  if (http.readyState == 4) {
+	       // comma separated data received, split into array
+	       results = http.responseText.split(",");
+	       // If data returned
+	       if (results.length > 1) {	// > 1 normal response (no error)
+		   // data from PHP returned in this order
+	           gameStatus = results[0];   // must be first (may be error message)
+	           board = results[1];	
+	           foo1 = results[2]; 
+	           foo2 = results[3]; 
+	           
+	      
+	           startgame();  // send data back to PHP
+	           }
+	       } else {  // PHP had error, only error message sent
+	           	gameStatus = results[0];   // must be first (error message)
+
+		   		// put data on screen (error message from PHP)
+		   		document.getElementById("gameStatus").innerHTML =  message;
+	       }
+	  }  // end if state 4
+}
+	
+function startgame() {
+	//Create the XMLHttpRequest Object
+	var xmlhttp;
+	// error handling
+	if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+	  try {
+	    xmlhttp = new XMLHttpRequest();
+	  } catch (e) {
+	    xmlhttp = false;
+	  }
+	}
+	http = xmlhttp;
+
+    var url = "program.php?resetRequest=" + resetRequest;
+    // for this example, only pass to PHP games played
+    // "&" separates n/v pairs
+    // add variables and values to url to be sent to php program
+    url += "&argument2=" + argument2;
+    url += "&argument3=" + argument3;
+    url += "&argument4=" + argument4;
+    url += "&argument5=" + argument5;
+
+    }
+    // for a "real" solution, pass more data to PHP about state of game
+    // send get request to server with n/v pairs of screen data
+    http.open("GET", url, true);  
+
+    // register with server what function to return data
+    http.onreadystatechange = handleHttpResponse;
+}
+
+</script>
+
+<title>Insert title here</title>
+</head>
+<body>
+
+</body>
+</html>
