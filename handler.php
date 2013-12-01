@@ -25,17 +25,21 @@ $player_name;
 $player_id;
 $turn_count = 0;
 
+//assign player position
+first_load();
+
+
 //Waiting for players loop
 //this will check for players
 while (1)
 {
-    $new_player_count = checkplayercount();
+    $new_player_count = check_player_count();
 
     if ($new_player_count >= 3)
     {
+        $msg = "start";
         //message browser that its ready to start
-        outputMessage( PULSE_MESSAGE );
-        //break
+        outputMessage( $msg );
         break;
     }
 
@@ -52,6 +56,8 @@ while(1){
 
     //check for people exiting game;
     if(handleShutdown()){
+        $msg = "shutdown";
+        outputMessage($msg);
         break;
     }
 
@@ -67,21 +73,26 @@ while(1){
         $play_pos = get_play_pos();
         $play_value = get_play_value();
 
+        $msg = "turn" . $play_pos . "," . $play_value . "," . $turn_count;
+
         //push pos, value, new turn
-        outputMessage($play_pos);
-        outputMessage($play_value);
-        outputMessage($turn_count);
+        outputMessage($msg);
 
     }
+
     usleep( GAMES_CHECK_INTERVAL );
 
 }
 
+function waited_for_play(){
+    $msg = "autoPlay";
+    outputMessage($msg);
+}
 
 #
 # END OF SCRIPT - functions follow
 #
-function checkplayercount()
+function check_player_count()
 {
     $count =0;
     //get player count;
@@ -109,10 +120,7 @@ function handleShutdown()
     if ( $connectionStatus == 1)
     {
         // User aborted - take appropriate action
-        vacant_player();
-
-        //closes script if true;
-        return false;
+        return true;
 
     }
     elseif ( $connectionStatus == 2 )
@@ -121,8 +129,21 @@ function handleShutdown()
     }
     else
     {
-        return true;
+        return false;
     }
+}
+
+function first_load(){
+    //looking to db for player pos
+    $player_pos = get_player_pos();
+    //set play pos
+    $msg = "playerId" . "," . $player_pos;
+    outputMessage($msg);
+}
+function get_player_pos()
+{
+    //figure out which position
+    return 1;
 }
 
 function vacant_player()
