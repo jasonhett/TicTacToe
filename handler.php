@@ -21,9 +21,10 @@ outputToBrowser( str_repeat( '.', KICKSTART_LENGTH ) );
 
 
 //setup player info
-$player_name;
-$player_id;
-$turn_count = 0;
+$player_name= '';
+$player_id= -1;
+$turn_count= 0;
+$game_id =  -1;
 
 //assign player position
 first_load();
@@ -136,6 +137,7 @@ function handleShutdown()
 function first_load(){
     //looking to db for player pos
     $player_pos = get_player_pos();
+    $GLOBALS['game_id'] = get_game_id();
     //set play pos
     $msg = "playerId" . "," . $player_pos;
     outputMessage($msg);
@@ -146,10 +148,6 @@ function get_player_pos()
     return 1;
 }
 
-function vacant_player()
-{
-    //make a play
-}
 function get_turn_count()
 {
 
@@ -159,6 +157,11 @@ function get_play_pos()
 
 }
 function get_play_value()
+{
+
+}
+
+function get_game_id()
 {
 
 }
