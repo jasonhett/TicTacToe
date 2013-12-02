@@ -111,7 +111,7 @@ table.table-tictactoe td {
 <script>
 
 var playerNum = 1;
-var playerPiece = "X";
+var gamePiece = "X";
 var gameID = 0;
 
 var resetRequest = false;
@@ -207,6 +207,16 @@ function handleHttpResponse(http) {
 			else if (typeOfRequest === "playerId") {
 				playerNum = results[1];
 				gameID = results[2];
+				
+				if (playerNum === 1) {
+					gamePiece = "X";
+				}
+				else if (playerNum === 2) {
+					gamePiece = "Y";
+				}
+				else {
+					gamePiece = "Z";
+				}
 			}
 			else if (typeOfRequest === "shutdown") {
 
@@ -284,7 +294,7 @@ function quitGame() {
 
 function squareClicked(clickedObject) {
 	if (clickedObject.innerHTML < 1) {
-		clickedObject.innerHTML = playerPiece;
+		clickedObject.innerHTML = gamePiece;
 		gameBoard[clickedObject.id] = playerNum;
 		sendTurn(clickedObject.id);
 	}
