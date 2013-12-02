@@ -105,13 +105,19 @@ table.table-tictactoe td {
 			<button type="button" class="btn btn-danger" onClick="quitGame()">Quit Game</button>
 		</div>
 	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-body" style="text-align:center">
+			<h3>Message Center</h3>
+		</div>
+	</div>	
 </div>
 </body>
 
 <script>
 
 var playerNum = 1;
-var playerPiece = "X";
+var gamePiece = "X";
 var gameID = 0;
 
 var resetRequest = false;
@@ -207,6 +213,16 @@ function handleHttpResponse(http) {
 			else if (typeOfRequest === "playerId") {
 				playerNum = results[1];
 				gameID = results[2];
+				
+				if (playerNum === 1) {
+					gamePiece = "X";
+				}
+				else if (playerNum === 2) {
+					gamePiece = "Y";
+				}
+				else {
+					gamePiece = "Z";
+				}
 			}
 			else if (typeOfRequest === "shutdown") {
 
@@ -284,7 +300,7 @@ function quitGame() {
 
 function squareClicked(clickedObject) {
 	if (clickedObject.innerHTML < 1) {
-		clickedObject.innerHTML = playerPiece;
+		clickedObject.innerHTML = gamePiece;
 		gameBoard[clickedObject.id] = playerNum;
 		sendTurn(clickedObject.id);
 	}
