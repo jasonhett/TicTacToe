@@ -263,7 +263,19 @@ function updateScores() {
 }
 
 function joinGame() {
-
+    var xmlhttp;
+    // error handling
+    if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+        try {
+            xmlhttp = new XMLHttpRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
+    }
+    var url = "handler.php";
+    xmlhttp.open("POST", url , true);
+    xmlhttp.onreadystatechange = handleHttpResponse;
+    pollTimer = setInterval(handleHttpResponse, 1000);
 }
 
 function quitGame() {
