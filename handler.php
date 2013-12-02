@@ -160,7 +160,7 @@ function get_player_pos()
 function get_turn_count()
 {
     include "mysqlConnect.php";
-    $sql = mysql_query("SELECT * FROM Game WHERE game_ID = '$GLOBALS['game_id']'");
+    $sql = mysql_query("SELECT * FROM Game WHERE idGame = '$GLOBALS['game_id']'");
     $isGameExists = mysql_num_rows($sql);
     if($isGameExists){
         $row = mysql_fetch_array($sql)
@@ -172,7 +172,7 @@ function get_turn_count()
 function get_play_pos()
 {
     include "mysqlConnect.php";
-    $sql = mysql_query("SELECT * FROM Game WHERE game_ID = $GLOBALS['game_id']");
+    $sql = mysql_query("SELECT * FROM Game WHERE idGame = $GLOBALS['game_id']");
     $isGameExists = mysql_num_rows($sql);
     if($isGameExists){
         $row = mysql_fetch_array($sql);
@@ -183,7 +183,7 @@ function get_play_pos()
 function get_play_value()
 {
     include "mysqlConnect.php";
-    $sql = mysql_query("SELECT * FROM Game WHERE game_ID = $GLOBALS['game_id']");
+    $sql = mysql_query("SELECT * FROM Game WHERE idGame = $GLOBALS['game_id']");
     $isGameExists = mysql_num_rows($sql);
     if($isGameExists){
         $row = mysql_fetch_array($sql);
