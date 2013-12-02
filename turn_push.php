@@ -15,7 +15,7 @@ increment_turn();
 
 
 //sql functions to update db
-function($pos, $value){
+function update_db ($pos, $value){
     //update the value at the pos
     //keep track that this is last update so we can grab it later
 }
