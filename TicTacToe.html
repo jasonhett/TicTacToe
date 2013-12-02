@@ -78,18 +78,22 @@ table.table-tictactoe td {
 				<tr>
 					<th>Player</th>
 					<th>Score</th>
+					<th>Token</th>
 				</tr>
 				<tr>
 					<td>Player 1</td>
 					<td id="p1Score">0</td>
+					<td>X</td>
 				</tr>
 				<tr>
 					<td>Player 2</td>
 					<td id="p2Score">0</td>
+					<td>Y</td>
 				</tr>
 				<tr>
 					<td>Player 3</td>
 					<td id="p3Score">0</td>
+					<td>Z</td>
 				</tr>
 			</table>
 		
@@ -120,9 +124,9 @@ var gameBoard = [
 				  0, 0, 0, 0, 0 //row 5
 				  ];
 
-var p1 = { number: Number(1), score: Number(0)};
-var p2 = { number: Number(2), score: Number(0)};
-var p3 = { number: Number(3), score: Number(0)};
+var p1 = { name: "p1", number: Number(1), score: Number(0)};
+var p2 = { name: "p2", number: Number(2), score: Number(0)};
+var p3 = { name: "p3", number: Number(3), score: Number(0)};
 
 
 			  
@@ -222,11 +226,26 @@ function handleHttpResponse(http) {
 }
 	
 function sendTurn(gridPosition) {
+	//Create the XMLHttpRequest Object
+	var xmlhttp;
+	// error handling
+	if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+	  try {
+		xmlhttp = new XMLHttpRequest();
+	  } catch (e) {
+		xmlhttp = false;
+	  }
+	}
+
+	var data = "turn_push.php="
+	data += "&position=" + gridPosition;
+	data += "&value=" + playerNum;
+	data += "&gameId=" + gameID;
 	
-$.post( "turn_push.php", { position: gridPosition, value: playerNum, gameId:gameID})
-  .done(function( data ) {
-    handleHttpResponse(data);
-  });
+	xmlhttp.open("POST", data, false);  
+
+	// register with server what function to return data
+	xmlhttp.send(null)	
 
 }
 
@@ -238,7 +257,8 @@ function updateScores() {
 		getVerticalScores(player);
 		getRightDiagonalScores(player);
 		getLeftDiagonalScores(player);
-		document.getElementById(player+"Score").innerHTML = player.score;
+		scoreField =  player.name +"Score";
+		document.getElementById(scoreField).innerHTML = player.score;
 	});
 }
 
