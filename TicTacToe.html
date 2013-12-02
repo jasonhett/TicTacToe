@@ -237,15 +237,14 @@ function sendTurn(gridPosition) {
 	  }
 	}
 
-	var data = "turn_push.php="
-	data += "&position=" + gridPosition;
+	var url = "turn_push.php"
+	var data = "position=" + gridPosition;
 	data += "&value=" + playerNum;
 	data += "&gameId=" + gameID;
 	
-	xmlhttp.open("POST", data, false);  
+	xmlhttp.open("POST", url, false);  
 
-	// register with server what function to return data
-	xmlhttp.send(null)	
+	xmlhttp.send(data);	
 
 }
 
@@ -275,7 +274,8 @@ function joinGame() {
     var url = "handler.php";
     xmlhttp.open("POST", url , true);
     xmlhttp.onreadystatechange = handleHttpResponse;
-    pollTimer = setInterval(handleHttpResponse, 1000);
+	xmlhttp.send(null);
+    //pollTimer = setInterval(handleHttpResponse, 1000);
 }
 
 function quitGame() {
