@@ -12,57 +12,95 @@
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 
 <style type="text/css">
-td {
-    font-size:48pt;
-	text-align:center;
-}
+table.table-tictactoe td {
+		font-size:48pt;
+		text-align:center;	
+		border-width:thick;
+		border-style:solid;
+	}
 </style>
   
  </head>
 
 <body>
+	<center>
+	<h1>Awesome Tic Tac Toe</h1>
+	</center>
 
 <div class="col-md-8">
-<center>
-<h1>Awesome Tic Tac Toe</h1>
-</center>
-	<table class = "table table-bordered">
-		<tr>
-			<td id = "0" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "1" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "2" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "3" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "4" onClick="squareClicked(this)" height="100" width="100" ></td>
-		</tr>
-		<tr>
-			<td id = "5" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "6" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "7" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "8" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "9" onClick="squareClicked(this)" height="100" width="100" ></td>
-		</tr>
-		<tr>
-			<td id = "10" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "11" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "12" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "13" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "14" onClick="squareClicked(this)" height="100" width="100" ></td>
-		</tr>
-		<tr>
-			<td id = "15" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "16" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "17" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "18" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "19" onClick="squareClicked(this)" height="100" width="100" ></td>
-		</tr>
-		<tr>
-			<td id = "20" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "21" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "22" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "23" onClick="squareClicked(this)" height="100" width="100" ></td>
-			<td id = "24" onClick="squareClicked(this)" height="100" width="100" ></td>
-		</tr>
-	</table>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table class = "table table-bordered table-tictactoe">
+				<tr>
+					<td id = "0" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "1" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "2" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "3" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "4" onClick="squareClicked(this)" height="100" width="100" ></td>
+				</tr>
+				<tr>
+					<td id = "5" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "6" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "7" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "8" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "9" onClick="squareClicked(this)" height="100" width="100" ></td>
+				</tr>
+				<tr>
+					<td id = "10" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "11" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "12" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "13" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "14" onClick="squareClicked(this)" height="100" width="100" ></td>
+				</tr>
+				<tr>
+					<td id = "15" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "16" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "17" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "18" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "19" onClick="squareClicked(this)" height="100" width="100" ></td>
+				</tr>
+				<tr>
+					<td id = "20" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "21" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "22" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "23" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "24" onClick="squareClicked(this)" height="100" width="100" ></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-4">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table class = "table table-striped">
+				<tr>
+					<th>Player</th>
+					<th>Score</th>
+				</tr>
+				<tr>
+					<td>Player 1</td>
+					<td id="p1Score">0</td>
+				</tr>
+				<tr>
+					<td>Player 2</td>
+					<td id="p2Score">0</td>
+				</tr>
+				<tr>
+					<td>Player 3</td>
+					<td id="p3Score">0</td>
+				</tr>
+			</table>
+		
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-body" style="text-align:center">
+			<button type="button" class="btn btn-success" onClick="joinGame()">Join Game</button>
+			<button type="button" class="btn btn-danger" onClick="quitGame()">Quit Game</button>
+		</div>
+	</div>
 </div>
 </body>
 
@@ -152,46 +190,65 @@ function getLeftDiagonalScores(player) {
 }
 
 function handleHttpResponse(http) {
-	  //comes in position, value, turnNumber
-	   results = http.split(",");
-	   // If data returned
-	   if (results.length > 1) {	// > 1 normal response (no error)
-	   // data from PHP returned in this order
-		   typeOfRequest = results[0];
-		   if (typeOfRequest === "start") {
+		//comes in position, value, turnNumber
+		results = http.split(",");
+		// If data returned
+		if (results.length > 1) {	// > 1 normal response (no error)
+			// data from PHP returned in this order
+			typeOfRequest = results[0];
+			if (typeOfRequest === "start") {
 				//output message game is starting
 				//undisable buttons if player turn
-		   }
-		   else if (typeOfRequest === "playerId") {
+			}
+			else if (typeOfRequest === "playerId") {
 				playerNum = results[1];
 				gameID = results[2];
-		   }
-		   else if (typeOfRequest === "shutdown") {
-		   
-		   }
-		   else if (typeOfRequestt === "autoPlay") {
+			}
+			else if (typeOfRequest === "shutdown") {
+
+			}
+			else if (typeOfRequest === "autoPlay") {
 				//output autoplay message
 				position = results[1]; 
 				value = results[2];	
 				turn = results[3]; 
-		   }
-		   else {
+			}
+			else {
 				position = results[1]; 
 				value = results[2];	
 				turn = results[3]; 
-		   }         
+			}     
 		} 
 }
 	
 function sendTurn(gridPosition) {
 	
-$.post( "turn-push.php", { position: gridPosition, value: playerNum })
+$.post( "turn_push.php", { position: gridPosition, value: playerNum, gameId:gameID})
   .done(function( data ) {
     handleHttpResponse(data);
   });
 
 }
 
+function updateScores() {
+	players = [p1, p2, p3];
+	players.forEach(function(player) {
+		player.score = 0;
+		getHorizontalScores(player);
+		getVerticalScores(player);
+		getRightDiagonalScores(player);
+		getLeftDiagonalScores(player);
+		document.getElementById(player+"Score").innerHTML = player.score;
+	});
+}
+
+function joinGame() {
+
+}
+
+function quitGame() {
+
+}
 
 function squareClicked(clickedObject) {
 	if (clickedObject.innerHTML < 1) {
