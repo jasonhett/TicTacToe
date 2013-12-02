@@ -95,9 +95,12 @@ function waited_for_play(){
 #
 function check_player_count()
 {
+    include "mysqlConnect.php";
     $count =0;
     //get player count;
 
+    $sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$GLOBALS['game_id']'");
+    $count = mysql_num_rows($sql);
 
     return $count;
 }
@@ -144,26 +147,78 @@ function first_load(){
 }
 function get_player_pos()
 {
-    //figure out which position
-    return 1;
+    include "mysqlConnect.php";
+
+    $sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$GLOBALS['game_id']'");
+    $currentPlayerCount = mysql_num_rows($sql);
+
+    return $currentPlayerCount + 1;
+    
 }
+
 
 function get_turn_count()
 {
+    include "mysqlConnect.php";
+    $sql = mysql_query("SELECT * FROM Game WHERE game_ID = '$GLOBALS['game_id']'");
+    $isGameExists = mysql_num_rows($sql);
+    if($isGameExists){
+        $row = mysql_fetch_array($sql)
+        return $row['turn_Count'];
+    }
 
+    return -1; 
 }
 function get_play_pos()
 {
-
+    include "mysqlConnect.php";
+    $sql = mysql_query("SELECT * FROM Game WHERE game_ID = $GLOBALS['game_id']");
+    $isGameExists = mysql_num_rows($sql);
+    if($isGameExists){
+        $row = mysql_fetch_array($sql);
+        return $row['lastPos'];
+    }
+    return -1;
 }
 function get_play_value()
 {
+    include "mysqlConnect.php";
+    $sql = mysql_query("SELECT * FROM Game WHERE game_ID = $GLOBALS['game_id']");
+    $isGameExists = mysql_num_rows($sql);
+    if($isGameExists){
+        $row = mysql_fetch_array($sql);
+        $last_pos = strval($row['lastPos']);
+        return $row[$last_pos];
+    }
 
+    return -1;
 }
 
 function get_game_id()
 {
+    include "mysqlConnect.php";
+    $sql = mysql_query("SELECT * FROM Game");
+    $GameCount = mysql_num_rows($sql); 
 
+    if ($GameCount == 0 ){
+        makeNewGame();
+        return 1;
+    }
+
+    $sqlQueryLastGame = mysql_query("SELECT * FROM Players WHERE game_ID = '$GameCount'");
+    $playerCountOfTheGame = mysql_num_rows($sqlQueryLastGame);
+    if ($playerCountOfTheGame >= 3 ){
+        makeNewGame();
+        return $GameCount + 1;
+    }
+
+    return $GameCount;
+}
+
+function makeNewGame()
+{
+    include "mysqlConnect.php";
+    mysql_query("INSERT INTO Game (turn_Count) VALUES (0)") or die(mysql_error());
 }
 
 ?>
