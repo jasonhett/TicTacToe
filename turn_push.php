@@ -7,8 +7,18 @@
  * To change this template use File | Settings | File Templates.
  */
 
-//grab info
+$pos =  $_POST['position'];
+$value = $_POST['value'];
+
+update_db($pos, $value);
+increment_turn();
 
 
 //sql functions to update db
-
+function update_db ($pos, $value){
+    //update the value at the pos
+    //keep track that this is last update so we can grab it later
+}
+function increment_turn(){
+    //increment sql turn counter
+}

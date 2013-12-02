@@ -1,120 +1,209 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://gmpg.org/xfn/11">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script> 
+  
+<!-- Latest compiled and minified CSS -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
 
-var board = new Array();
+<!-- Latest compiled and minified JavaScript -->
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 
-var resetRequest = false;
-
-function handleHttpResponse() {
-	  // response=4 means server completed request
-	  if (http.readyState == 4) {
-	       // comma separated data received, split into array
-	       results = http.responseText.split(",");
-	       // If data returned
-	       if (results.length > 1) {	// > 1 normal response (no error)
-		   // data from PHP returned in this order
-	           gameStatus = results[0];   // must be first (may be error message)
-	           board = results[1];	
-	           foo1 = results[2]; 
-	           foo2 = results[3]; 
-	           
-	      
-	           startgame();  // send data back to PHP
-	           }
-	       } else {  // PHP had error, only error message sent
-	           	gameStatus = results[0];   // must be first (error message)
-
-		   		// put data on screen (error message from PHP)
-		   		document.getElementById("gameStatus").innerHTML =  message;
-	       }
-	  }  // end if state 4
+<style type="text/css">
+td {
+    font-size:48pt;
+	text-align:center;
 }
-	
-function startgame() {
-	//Create the XMLHttpRequest Object
-	var xmlhttp;
-	// error handling
-	if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
-	  try {
-	    xmlhttp = new XMLHttpRequest();
-	  } catch (e) {
-	    xmlhttp = false;
-	  }
-	}
-	http = xmlhttp;
+</style>
+  
+ </head>
 
-    var url = "program.php?resetRequest=" + resetRequest;
-    // for this example, only pass to PHP games played
-    // "&" separates n/v pairs
-    // add variables and values to url to be sent to php program
-    url += "&argument2=" + argument2;
-    url += "&argument3=" + argument3;
-    url += "&argument4=" + argument4;
-    url += "&argument5=" + argument5;
-
-    }
-    // for a "real" solution, pass more data to PHP about state of game
-    // send get request to server with n/v pairs of screen data
-    http.open("GET", url, true);  
-
-    // register with server what function to return data
-    http.onreadystatechange = handleHttpResponse;
-}
-
-</script>
-
-
-CTYPE html>
-<html>
 <body>
 
+<div class="col-md-8">
 <center>
 <h1>Awesome Tic Tac Toe</h1>
 </center>
-<center>
-<table>
-    <tr>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-    </tr>
-    <tr>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-    </tr>
-    <tr>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-    </tr>
-    <tr>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-    </tr>
-    <tr>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-        <td><button type="button">Click Me!</button></td>
-    </tr>
-</table>
-</center>
-
+	<table class = "table table-bordered">
+		<tr>
+			<td id = "0" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "1" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "2" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "3" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "4" onClick="squareClicked(this)" height="100" width="100" ></td>
+		</tr>
+		<tr>
+			<td id = "5" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "6" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "7" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "8" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "9" onClick="squareClicked(this)" height="100" width="100" ></td>
+		</tr>
+		<tr>
+			<td id = "10" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "11" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "12" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "13" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "14" onClick="squareClicked(this)" height="100" width="100" ></td>
+		</tr>
+		<tr>
+			<td id = "15" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "16" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "17" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "18" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "19" onClick="squareClicked(this)" height="100" width="100" ></td>
+		</tr>
+		<tr>
+			<td id = "20" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "21" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "22" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "23" onClick="squareClicked(this)" height="100" width="100" ></td>
+			<td id = "24" onClick="squareClicked(this)" height="100" width="100" ></td>
+		</tr>
+	</table>
+</div>
 </body>
+
+<script>
+
+var playerNum = 1;
+var playerPiece = "X";
+var gameID = 0;
+
+var resetRequest = false;
+
+var gameBoard = [
+				  0, 0, 0, 0, 0, //row 1
+				  0, 0, 0, 0, 0, //row 2
+				  0, 0, 0, 0, 0, //row 3
+				  0, 0, 0, 0, 0, //row 4
+				  0, 0, 0, 0, 0 //row 5
+				  ];
+
+var p1 = { number: Number(1), score: Number(0)};
+var p2 = { number: Number(2), score: Number(0)};
+var p3 = { number: Number(3), score: Number(0)};
+
+
+			  
+function getHorizontalScores(player) {
+	for (var row = 0; row < 25; row ++) {
+		for (var column = 0; column < 5 ; column += 5) {
+			var pointValue = 1;
+			while (gameBoard[row + column] === player.number && column < 5) {
+				player.score += pointValue;
+				pointValue++;
+				column++;
+			}								
+		}
+	}
+}
+
+function getVerticalScores(player) {
+	for (var column = 0; column < 5; column++) {
+		for (var row = 0; row < 25 ; row+=5) {
+			var pointValue = 1;
+			var length = 0;
+			while (gameBoard[column + row] === player.number && row < 25) {
+				length++;
+				player.score += pointValue;
+				pointValue++;
+				row+=5;
+			}
+			if (length === 1) {player.score--;}
+		}
+	}
+}
+
+function getRightDiagonalScores(player) {
+	var startingPositions = [0,1,2,3,5,10,15];
+	startingPositions.forEach(function(start) {
+		for (var position = start; position < 25; position += 6) {
+			var pointValue = 1;
+			var length = 0;
+			while (gameBoard[position] === player.number && position < 25) {
+				length++;
+				player.score += pointValue;
+				pointValue++;
+				position+=6;
+			}
+			if (length === 1) {player.score--;}
+		}
+	});
+}
+
+function getLeftDiagonalScores(player) {
+	var startingPositions = [1,2,3,4,9,14,19];
+	startingPositions.forEach(function(start) {
+		for (var position = start; position < 25; position += 4) {
+			var pointValue = 1;
+			var length = 0;
+			while (gameBoard[position] === player.number && position < 25) {
+				length++;
+				player.score += pointValue;
+				pointValue++;
+				position+=4;
+			}
+			if (length === 1) {player.score--;}
+		}
+	});
+}
+
+function handleHttpResponse(http) {
+	  //comes in position, value, turnNumber
+	   results = http.split(",");
+	   // If data returned
+	   if (results.length > 1) {	// > 1 normal response (no error)
+	   // data from PHP returned in this order
+		   typeOfRequest = results[0];
+		   if (typeOfRequest === "start") {
+				//output message game is starting
+				//undisable buttons if player turn
+		   }
+		   else if (typeOfRequest === "playerId") {
+				playerNum = results[1];
+				gameID = results[2];
+		   }
+		   else if (typeOfRequest === "shutdown") {
+		   
+		   }
+		   else if (typeOfRequestt === "autoPlay") {
+				//output autoplay message
+				position = results[1]; 
+				value = results[2];	
+				turn = results[3]; 
+		   }
+		   else {
+				position = results[1]; 
+				value = results[2];	
+				turn = results[3]; 
+		   }         
+		} 
+}
+	
+function sendTurn(gridPosition) {
+	
+$.post( "turn-push.php", { position: gridPosition, value: playerNum })
+  .done(function( data ) {
+    handleHttpResponse(data);
+  });
+
+}
+
+
+function squareClicked(clickedObject) {
+	if (clickedObject.innerHTML < 1) {
+		clickedObject.innerHTML = playerPiece;
+		gameBoard[clickedObject.id] = playerNum;
+		sendTurn(clickedObject.id);
+	}
+	else {
+		alert("Please select a free space.");
+	}
+}
+</script>
 </html>
 
 
