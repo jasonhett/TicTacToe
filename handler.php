@@ -98,8 +98,8 @@ function check_player_count()
     include "mysqlConnect.php";
     $count =0;
     //get player count;
-
-    $sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$GLOBALS['game_id']'");
+    $game_id = intval($GLOBALS['game_id']);
+    $sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$game_id'");
     $count = mysql_num_rows($sql);
 
     return $count;
@@ -149,7 +149,8 @@ function get_player_pos()
 {
     include "mysqlConnect.php";
 
-    $sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$GLOBALS['game_id']'");
+    $game_id = intval($GLOBALS['game_id']);
+    $sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$game_id'");
     $currentPlayerCount = mysql_num_rows($sql);
 
     return $currentPlayerCount + 1;
@@ -160,10 +161,11 @@ function get_player_pos()
 function get_turn_count()
 {
     include "mysqlConnect.php";
-    $sql = mysql_query("SELECT * FROM Game WHERE idGame = '$GLOBALS['game_id']'");
+    $game_id = intval($GLOBALS['game_id']);
+    $sql = mysql_query("SELECT * FROM Game WHERE idGame = '$game_id'");
     $isGameExists = mysql_num_rows($sql);
     if($isGameExists){
-        $row = mysql_fetch_array($sql)
+        $row = mysql_fetch_array($sql);
         return $row['turn_Count'];
     }
 
@@ -172,7 +174,8 @@ function get_turn_count()
 function get_play_pos()
 {
     include "mysqlConnect.php";
-    $sql = mysql_query("SELECT * FROM Game WHERE idGame = $GLOBALS['game_id']");
+    $game_id = intval($GLOBALS['game_id']);
+    $sql = mysql_query("SELECT * FROM Game WHERE idGame = '$game_id'");
     $isGameExists = mysql_num_rows($sql);
     if($isGameExists){
         $row = mysql_fetch_array($sql);
@@ -183,7 +186,8 @@ function get_play_pos()
 function get_play_value()
 {
     include "mysqlConnect.php";
-    $sql = mysql_query("SELECT * FROM Game WHERE idGame = $GLOBALS['game_id']");
+    $game_id = intval($GLOBALS['game_id']);
+    $sql = mysql_query("SELECT * FROM Game WHERE idGame = '$game_id'");
     $isGameExists = mysql_num_rows($sql);
     if($isGameExists){
         $row = mysql_fetch_array($sql);
