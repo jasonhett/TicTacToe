@@ -101,8 +101,8 @@ table.table-tictactoe td {
 	</div>
 	<div class="panel panel-default">
 		<div class="panel-body" style="text-align:center">
-			<button type="button" class="btn btn-success" onClick="joinGame()">Join Game</button>
-			<button type="button" class="btn btn-danger" onClick="quitGame()">Quit Game</button>
+			<button id="join" type="button" class="btn btn-success" onClick="joinGame()">Join Game</button>
+			<button id="quit" type="button" class="btn btn-danger" onClick="quitGame()">Quit Game</button>
 		</div>
 	</div>
 	
@@ -308,6 +308,25 @@ function squareClicked(clickedObject) {
 		alert("Please select a free space.");
 	}
 }
+/*
+//test function
+$( document ).ready(function() {
+	//test join button
+	$('join').click();
+	//test quit button
+	$('quit').click();
+	
+	//find first square and click
+	document.getElementById('0').click();
+	document.getElementById('1').click();
+	document.getElementById('5').click();
+	document.getElementById('6').click();
+	//call a score update
+	updateScores();
+	//check if superfluous click detected
+	document.getElementById('0').click();
+});
+*/
 </script>
 </html>
 
