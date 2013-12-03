@@ -51,7 +51,9 @@ CREATE TABLE IF NOT EXISTS `AwesomeTicTacToe`.`Game` (
   `pos23` INT NULL,
   `pos24` INT NULL,
   `pos25` INT NULL,
+  `game_Name` VARCHAR(45) NULL,
   `turn_Count` INT NULL,
+  `lastPos` INT NULL,
   PRIMARY KEY (`idGame`))
 ENGINE = InnoDB;
 

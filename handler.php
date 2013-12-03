@@ -46,6 +46,7 @@ while (1)
 
     // Pause before next iteration
     usleep( JOINS_CHECK_INTERVAL );
+    break;
 }
 
 //Once exited waiting for players while loop goes into game updating loop
@@ -81,8 +82,9 @@ while(1){
 
     }
 
+    
     usleep( GAMES_CHECK_INTERVAL );
-
+    break;
 }
 
 function waited_for_play(){
@@ -98,7 +100,8 @@ function check_player_count()
     include "mysqlConnect.php";
     $count =0;
     //get player count;
-    $game_id = intval($GLOBALS['game_id']);
+    global $game_id;
+    #$game_id = intval($GLOBALS['game_id']);
     $sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$game_id'");
     $count = mysql_num_rows($sql);
 
@@ -108,7 +111,7 @@ function check_player_count()
 function outputToBrowser($out)
 {
     echo $out;
-    ob_flush();
+    #ob_flush();
     flush();
 }
 
@@ -140,7 +143,9 @@ function handleShutdown()
 function first_load(){
     //looking to db for player pos
     $player_pos = get_player_pos();
-    $GLOBALS['game_id'] = get_game_id();
+    global $game_id;
+    $game_id = get_game_id();
+    #$GLOBALS['game_id'] = get_game_id();
     //set play pos
     $msg = "playerId" . "," . $player_pos;
     outputMessage($msg);
@@ -148,8 +153,8 @@ function first_load(){
 function get_player_pos()
 {
     include "mysqlConnect.php";
-
-    $game_id = intval($GLOBALS['game_id']);
+    global $game_id;
+    #$game_id = intval($GLOBALS['game_id']);
     $sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$game_id'");
     $currentPlayerCount = mysql_num_rows($sql);
 
@@ -161,7 +166,8 @@ function get_player_pos()
 function get_turn_count()
 {
     include "mysqlConnect.php";
-    $game_id = intval($GLOBALS['game_id']);
+    global $game_id;
+    #$game_id = intval($GLOBALS['game_id']);
     $sql = mysql_query("SELECT * FROM Game WHERE idGame = '$game_id'");
     $isGameExists = mysql_num_rows($sql);
     if($isGameExists){
@@ -174,7 +180,8 @@ function get_turn_count()
 function get_play_pos()
 {
     include "mysqlConnect.php";
-    $game_id = intval($GLOBALS['game_id']);
+    global $game_id;
+    #$game_id = intval($GLOBALS['game_id']);
     $sql = mysql_query("SELECT * FROM Game WHERE idGame = '$game_id'");
     $isGameExists = mysql_num_rows($sql);
     if($isGameExists){
@@ -186,7 +193,8 @@ function get_play_pos()
 function get_play_value()
 {
     include "mysqlConnect.php";
-    $game_id = intval($GLOBALS['game_id']);
+    global $game_id;
+    #$game_id = intval($GLOBALS['game_id']);
     $sql = mysql_query("SELECT * FROM Game WHERE idGame = '$game_id'");
     $isGameExists = mysql_num_rows($sql);
     if($isGameExists){
