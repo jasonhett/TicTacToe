@@ -40,7 +40,7 @@ while (1)
 
     // Pause before next iteration
     usleep( JOINS_CHECK_INTERVAL );
-    break;
+    #break; //debug usage
 }
 
 //Once exited waiting for players while loop goes into game updating loop
@@ -78,7 +78,7 @@ while(1){
 
     
     usleep( GAMES_CHECK_INTERVAL );
-    break;
+    #break; //debug usage
 }
 
 function waited_for_play(){
