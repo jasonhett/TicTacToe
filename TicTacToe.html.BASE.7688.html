@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://gmpg.org/xfn/11">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script> 
+  
+<!-- Latest compiled and minified CSS -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+table.table-tictactoe td {
+		font-size:48pt;
+		text-align:center;	
+		border-width:thick;
+		border-style:solid;
+	}
+</style>
+  
+ </head>
+
+<body>
+	<center>
+	<h1>Awesome Tic Tac Toe</h1>
+	</center>
+
+<div class="col-md-8">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table class = "table table-bordered table-tictactoe">
+				<tr>
+					<td id = "0" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "1" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "2" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "3" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "4" onClick="squareClicked(this)" height="100" width="100" ></td>
+				</tr>
+				<tr>
+					<td id = "5" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "6" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "7" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "8" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "9" onClick="squareClicked(this)" height="100" width="100" ></td>
+				</tr>
+				<tr>
+					<td id = "10" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "11" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "12" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "13" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "14" onClick="squareClicked(this)" height="100" width="100" ></td>
+				</tr>
+				<tr>
+					<td id = "15" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "16" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "17" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "18" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "19" onClick="squareClicked(this)" height="100" width="100" ></td>
+				</tr>
+				<tr>
+					<td id = "20" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "21" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "22" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "23" onClick="squareClicked(this)" height="100" width="100" ></td>
+					<td id = "24" onClick="squareClicked(this)" height="100" width="100" ></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-4">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table class = "table table-striped">
+				<tr>
+					<th>Player</th>
+					<th>Score</th>
+					<th>Token</th>
+				</tr>
+				<tr>
+					<td>Player 1</td>
+					<td id="p1Score">0</td>
+					<td>X</td>
+				</tr>
+				<tr>
+					<td>Player 2</td>
+					<td id="p2Score">0</td>
+					<td>Y</td>
+				</tr>
+				<tr>
+					<td>Player 3</td>
+					<td id="p3Score">0</td>
+					<td>Z</td>
+				</tr>
+			</table>
+		
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-body" style="text-align:center">
+			<button id="join" type="button" class="btn btn-success" onClick="joinGame()">Join Game</button>
+			<button id="quit" type="button" class="btn btn-danger" onClick="quitGame()">Quit Game</button>
+		</div>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-body" style="text-align:center">
+			<h3>Message Center</h3>
+		</div>
+	</div>	
+</div>
+</body>
+
+<script>
+
+var playerNum = 1;
+var gamePiece = "X";
+var gameID = 0;
+
+var resetRequest = false;
+
+var gameBoard = [
+				  0, 0, 0, 0, 0, //row 1
+				  0, 0, 0, 0, 0, //row 2
+				  0, 0, 0, 0, 0, //row 3
+				  0, 0, 0, 0, 0, //row 4
+				  0, 0, 0, 0, 0 //row 5
+				  ];
+
+var p1 = { name: "p1", number: Number(1), score: Number(0)};
+var p2 = { name: "p2", number: Number(2), score: Number(0)};
+var p3 = { name: "p3", number: Number(3), score: Number(0)};
+
+
+			  
+function getHorizontalScores(player) {
+	for (var row = 0; row < 25; row ++) {
+		for (var column = 0; column < 5 ; column += 5) {
+			var pointValue = 1;
+			while (gameBoard[row + column] === player.number && column < 5) {
+				player.score += pointValue;
+				pointValue++;
+				column++;
+			}								
+		}
+	}
+}
+
+function getVerticalScores(player) {
+	for (var column = 0; column < 5; column++) {
+		for (var row = 0; row < 25 ; row+=5) {
+			var pointValue = 1;
+			var length = 0;
+			while (gameBoard[column + row] === player.number && row < 25) {
+				length++;
+				player.score += pointValue;
+				pointValue++;
+				row+=5;
+			}
+			if (length === 1) {player.score--;}
+		}
+	}
+}
+
+function getRightDiagonalScores(player) {
+	var startingPositions = [0,1,2,3,5,10,15];
+	startingPositions.forEach(function(start) {
+		for (var position = start; position < 25; position += 6) {
+			var pointValue = 1;
+			var length = 0;
+			while (gameBoard[position] === player.number && position < 25) {
+				length++;
+				player.score += pointValue;
+				pointValue++;
+				position+=6;
+			}
+			if (length === 1) {player.score--;}
+		}
+	});
+}
+
+function getLeftDiagonalScores(player) {
+	var startingPositions = [1,2,3,4,9,14,19];
+	startingPositions.forEach(function(start) {
+		for (var position = start; position < 25; position += 4) {
+			var pointValue = 1;
+			var length = 0;
+			while (gameBoard[position] === player.number && position < 25) {
+				length++;
+				player.score += pointValue;
+				pointValue++;
+				position+=4;
+			}
+			if (length === 1) {player.score--;}
+		}
+	});
+}
+
+function handleHttpResponse(http) {
+		//comes in position, value, turnNumber
+		results = http.split(",");
+		// If data returned
+		if (results.length > 1) {	// > 1 normal response (no error)
+			// data from PHP returned in this order
+			typeOfRequest = results[0];
+			if (typeOfRequest === "start") {
+				//output message game is starting
+				//undisable buttons if player turn
+			}
+			else if (typeOfRequest === "playerId") {
+				playerNum = results[1];
+				gameID = results[2];
+				
+				if (playerNum === 1) {
+					gamePiece = "X";
+				}
+				else if (playerNum === 2) {
+					gamePiece = "Y";
+				}
+				else {
+					gamePiece = "Z";
+				}
+			}
+			else if (typeOfRequest === "shutdown") {
+
+			}
+			else if (typeOfRequest === "autoPlay") {
+				//output autoplay message
+				position = results[1]; 
+				value = results[2];	
+				turn = results[3]; 
+			}
+			else {
+				position = results[1]; 
+				value = results[2];	
+				turn = results[3]; 
+			}     
+		} 
+}
+	
+function sendTurn(gridPosition) {
+	//Create the XMLHttpRequest Object
+	var xmlhttp;
+	// error handling
+	if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+	  try {
+		xmlhttp = new XMLHttpRequest();
+	  } catch (e) {
+		xmlhttp = false;
+	  }
+	}
+
+	var url = "turn_push.php"
+	var data = "position=" + gridPosition;
+	data += "&value=" + playerNum;
+	data += "&gameId=" + gameID;
+	
+	xmlhttp.open("POST", url, false);  
+
+	xmlhttp.send(data);	
+
+}
+
+function updateScores() {
+	players = [p1, p2, p3];
+	players.forEach(function(player) {
+		player.score = 0;
+		getHorizontalScores(player);
+		getVerticalScores(player);
+		getRightDiagonalScores(player);
+		getLeftDiagonalScores(player);
+		scoreField =  player.name +"Score";
+		document.getElementById(scoreField).innerHTML = player.score;
+	});
+}
+
+function joinGame() {
+    var xmlhttp;
+    // error handling
+    if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+        try {
+            xmlhttp = new XMLHttpRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
+    }
+    var url = "handler.php";
+    xmlhttp.open("POST", url , true);
+    xmlhttp.onreadystatechange = handleHttpResponse;
+	xmlhttp.send(null);
+    //pollTimer = setInterval(handleHttpResponse, 1000);
+}
+
+function quitGame() {
+
+}
+
+function squareClicked(clickedObject) {
+	if (clickedObject.innerHTML < 1) {
+		clickedObject.innerHTML = gamePiece;
+		gameBoard[clickedObject.id] = playerNum;
+		sendTurn(clickedObject.id);
+	}
+	else {
+		alert("Please select a free space.");
+	}
+}
+/*
+//test function
+$( document ).ready(function() {
+	//test join button
+	$('join').click();
+	//test quit button
+	$('quit').click();
+	
+	//find first square and click
+	document.getElementById('0').click();
+	document.getElementById('1').click();
+	document.getElementById('5').click();
+	document.getElementById('6').click();
+	//call a score update
+	updateScores();
+	//check if superfluous click detected
+	document.getElementById('0').click();
+});
+*/
+</script>
+</html>
+
+
+
+
+
+
+
+

@@ -120,7 +120,6 @@ table.table-tictactoe td {
 var playerNum = 1;
 var gamePiece = "X";
 var gameID = 0;
-var previousResponse ="";
 
 //array representing gameBoard
 var gameBoard;
@@ -203,128 +202,76 @@ function getLeftDiagonalScores(player) {
 	});
 }
 
-function createRequestObject(){
-	var ro;
-	if ( window.XMLHttpRequest){
-		ro = new XMLHttpRequest();
-	} else {
-		ro = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-
-	if (!ro)
-		debug("Couldn't start XMLHttpRequest object");
-
-	return ro;
-}
-
-function startProcess(dataUrl){
-	http = createRequestObject();
-	http.open('get',dataUrl);
-	http.onreadystatechange = handleHttpResponse;
-	http.send(null);
-
-	pollTimer = setInterval(handleHttpResponse, 1000);
-
-}
-
-function handleHttpResponse() {
+function handleHttpResponse(http) {
 		//comes in position, value, turnNumber
-		
-		console.log(http);
+		results = http.split(",");
 		// If data returned
+		if (results.length > 1) {	// > 1 normal response (no error)
+			// data from PHP returned in this order
+			typeOfRequest = results[0];
+			if (typeOfRequest === "start") {
 
-		if ( http.readyState != 4 && http.readyState != 3)
-			return;
-		if ( http.readyState == 3 && http.status != 200)
-			return;
-		if ( http.readyState == 4 && http.status != 200){
-			clearInterval(pollTimer);
-			inProgress = false;
-		}
-
-		if (http.responseText == null)
-			return;
-		
-		//console.log('PrevResponse ' + previousResponse);
-		//consoel.log ('Http Reponsoe ' + http.responseText);
-		if (previousResponse != http.responseText){
-			var outputResponse;
-			console.log('got into spliting msg');
-			outputResponse = http.responseText.replace(previousResponse,'');
-			outputResponse = outputResponse.replace('#','');
-
-			console.log('Output' + outputResponse);
-
-		
-			var results = outputResponse.split(",");
-			if (results.length > 1) {	// > 1 normal response (no error)
-				// data from PHP returned in this order
-				var typeOfRequest = results[0];
-				if (typeOfRequest === "start") {
-
-					columns = results[1];
-					rows = results[2];
+				columns = results[1];
+				rows = results[2];
 				
-					createTable(columns, rows);
-					createGameBoard(rows, columns);				
+				createTable(columns, rows);
+				createGameBoard(rows, columns);				
 				
-					var message = "";
-					message += "<b>Gameboard is "+columns+"X"+rows+".</b><br/>";
-					if (playerNum == 1) { 
-						message += "<b>Game is ready. Please place your piece.</b><br/>";
-					}
-					else {
-						message += "<b>Game is ready. Player 1 is placing their piece.</b><br/>";
-					}
-					document.getElementById("messageCenter").innerHTML = message;
-				}
-				else if (typeOfRequest === "playerId") {
-					playerNum = results[1];
-					gameID = results[2];
-					
-					if (playerNum == 1) {
-						gamePiece = "X";
-					}
-					else if (playerNum == 2) {
-						gamePiece = "Y";
-					}
-					else {
-						gamePiece = "Z";
-					}
-				}
-				else if (typeOfRequest === "shutdown") {
-
-				}
-				else if (typeOfRequest === "autoPlay") {
-					//output autoplay message
-					position = results[1]; 
-					value = results[2];	
-					turn = results[3]; 
-					gameBoard[position] = value;
-					updateBoard();
+				var message = "";
+				message += "<b>Gameboard is "+columns+"X"+rows+".</b><br/>";
+				if (playerNum == 1) { 
+					message += "<b>Game is ready. Please place your piece.</b><br/>";
 				}
 				else {
-					position = results[1]; 
-					value = results[2];	
-					turn = results[3]; 
-					
-					gameBoard[position] = value;
-					updateBoard();
-					
-					var message = "";
-					message += "<u>Player "+value+" placed their piece.</u><br/>";
-					currentPlayerTurn = (value + 1) < 4 ? (value+1) : 1; 
-					if (currentPlayerTurn == playerNum) {	
-						message += "<b>Please place your piece.</b><br/>";
-					}
-					else {
-						message += "<b>Player "+(currentPlayerTurn)+" is placing their piece.</b><br/>";	
-					}
-					document.getElementById("messageCenter").innerHTML = message;
-				}     
+					message += "<b>Game is ready. Player 1 is placing their piece.</b><br/>";
+				}
+				document.getElementById("messageCenter").innerHTML = message;
 			}
-			previousResponse = http.responseText;
-		}
+			else if (typeOfRequest === "playerId") {
+				playerNum = results[1];
+				gameID = results[2];
+				
+				if (playerNum == 1) {
+					gamePiece = "X";
+				}
+				else if (playerNum == 2) {
+					gamePiece = "Y";
+				}
+				else {
+					gamePiece = "Z";
+				}			
+			}
+			else if (typeOfRequest === "shutdown") {
+
+			}
+			else if (typeOfRequest === "autoPlay") {
+				//output autoplay message
+				position = results[1]; 
+				value = results[2];	
+				turn = results[3]; 
+				gameBoard[position] = value;
+				updateBoard();
+			}
+			else {
+				position = results[1]; 
+				value = results[2];	
+				turn = results[3]; 
+				
+				gameBoard[position] = value;
+				updateBoard();
+				
+				var message = "";
+				message += "<u>Player "+value+" placed their piece.</u><br/>";
+				currentPlayerTurn = (value + 1) < 4 ? (value+1) : 1; 
+				if (currentPlayerTurn == playerNum) {	
+					message += "<b>Please place your piece.</b><br/>";
+				}
+				else {
+					message += "<b>Player "+(currentPlayerTurn)+" is placing their piece.</b><br/>";	
+				}
+				document.getElementById("messageCenter").innerHTML = message;
+			}     
+		} 
 }
 
 function updateBoard() {
@@ -352,14 +299,13 @@ function sendTurn(gridPosition) {
 		xmlhttp = false;
 	  }
 	}
-	xmlhttp;
+
 	var url = "turn_push.php"
 	var data = "position=" + gridPosition;
 	data += "&value=" + playerNum;
 	data += "&gameId=" + gameID;
 	
 	xmlhttp.open("POST", url, false);  
-	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	xmlhttp.send(data);	
 	xmlhttp.onreadystatechange = handleHttpResponse;
 }
@@ -378,9 +324,9 @@ function updateScores() {
 }
 
 function joinGame() {
-
-    // error handling
+	
     var xmlhttp;
+    // error handling
     if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
         try {
             xmlhttp = new XMLHttpRequest();
@@ -388,20 +334,17 @@ function joinGame() {
             xmlhttp = false;
         }
     }
-
-    http = xmlhttp;
-
-    var data = "colSize=" + $(column).val();
-	data += "&rowSize=" + $(row).val();
-
+	
+	var data = "colSize" + $(column).val();
+	data += "&rowSize" + $(row).val();
+	
     var url = "handler.php";
-    http.open("POST", url , true);
-    http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    http.onreadystatechange = handleHttpResponse;
-	http.send(data);
+    xmlhttp.open("POST", url , true);
+	xmlhttp.send(data);	
+	xmlhttp.onreadystatechange = handleHttpResponse;
+    //pollTimer = setInterval(handleHttpResponse, 1000);
 	$(join).prop('disabled', true);
 	$(boardSize).addClass('hidden')
-    pollTimer = setInterval(handleHttpResponse, 1000);
 }
 
 function createTable(rows, columns) { 

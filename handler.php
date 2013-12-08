@@ -1,6 +1,8 @@
 <?php
 
-
+$row_size = intval($_POST['rowSize']);
+$col_size = intval($_POST['colSize']);
+$total_cell_count = 0;
 define( 'JOINS_CHECK_INTERVAL', 1000000 );
 define( 'GAMES_CHECK_INTERVAL', 100000 );
 define( 'MESSAGE_DELIMITER', '#' );
@@ -32,9 +34,10 @@ while (1)
 
     if ($new_player_count >= 3)
     {
-        $msg = "start";
+        $msg = "start" . "," . getSizeAverage();
         //message browser that its ready to start
         //Vote Averge
+
         outputMessage( $msg );
         break;
     }
@@ -47,7 +50,8 @@ while (1)
 //Once exited waiting for players while loop goes into game updating loop
 while(1){
     //end if turns greater than 25
-    if($turn_count > 24){
+    global $total_cell_count;
+    if($turn_count > $total_cell_count){
         break;
     }
 
@@ -80,6 +84,18 @@ while(1){
     
     usleep( GAMES_CHECK_INTERVAL );
     #break; //debug usage
+}
+
+function getSizeAverage(){
+
+    include "mysqlConnect.php";
+    //get player count;
+    #$game_id = intval($GLOBALS['game_id']);
+    global $game_id, $total_cell_count;
+    $sql = mysql_query("SELECT AVG(p.col_Choice) AS col_avg, AVG(p.row_Choice) AS row_avg FROM Players p WHERE p.game_ID = '$game_id'");
+    $rows = mysql_fetch_array($sql);
+    $total_cell_count = intval($rows['col_avg']) * intval($rows['row_avg']);
+    return strval(intval($rows['col_avg']) . "," . intval($rows['row_avg']));
 }
 
 function waited_for_play(){
@@ -156,12 +172,12 @@ function register_player(){
 function get_player_pos()
 {
     include "mysqlConnect.php";
-    global $game_id;
+    global $game_id,$row_size,$col_size;
     #$game_id = intval($GLOBALS['game_id']);
     #$sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$game_id'");
     #$currentPlayerCount = mysql_num_rows($sql);
 
-    mysql_query("INSERT INTO Players (game_ID) VALUES ($game_id)") or die(mysql_error());
+    mysql_query("INSERT INTO Players (game_ID, row_Choice, col_Choice) VALUES ($game_id,$row_size,$col_size)") or die(mysql_error());
     return check_player_count();
     
 }

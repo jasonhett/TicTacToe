@@ -262,21 +262,21 @@ function handleHttpResponse() {
 				var typeOfRequest = results[0];
 				if (typeOfRequest === "start") {
 
-					columns = results[1];
-					rows = results[2];
+				columns = results[1];
+				rows = results[2];
 				
-					createTable(columns, rows);
-					createGameBoard(rows, columns);				
+				createTable(columns, rows);
+				createGameBoard(rows, columns);				
 				
-					var message = "";
-					message += "<b>Gameboard is "+columns+"X"+rows+".</b><br/>";
-					if (playerNum == 1) { 
-						message += "<b>Game is ready. Please place your piece.</b><br/>";
-					}
-					else {
-						message += "<b>Game is ready. Player 1 is placing their piece.</b><br/>";
-					}
-					document.getElementById("messageCenter").innerHTML = message;
+				var message = "";
+				message += "<b>Gameboard is "+columns+"X"+rows+".</b><br/>";
+				if (playerNum == 1) { 
+					message += "<b>Game is ready. Please place your piece.</b><br/>";
+				}
+				else {
+					message += "<b>Game is ready. Player 1 is placing their piece.</b><br/>";
+				}
+				document.getElementById("messageCenter").innerHTML = message;
 				}
 				else if (typeOfRequest === "playerId") {
 					playerNum = results[1];
@@ -391,8 +391,8 @@ function joinGame() {
 
     http = xmlhttp;
 
-    var data = "colSize=" + $(column).val();
-	data += "&rowSize=" + $(row).val();
+    var data = "colSize" + $(column).val();
+	data += "&rowSize" + $(row).val();
 
     var url = "handler.php";
     http.open("POST", url , true);
