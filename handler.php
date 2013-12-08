@@ -143,7 +143,7 @@ function first_load(){
     $player_pos = get_player_pos();
     #$GLOBALS['game_id'] = get_game_id();
     //set play pos
-    $msg = "playerId" . "," . $player_pos;
+    $msg = "playerId" . "," . $player_pos . "," . $game_id;
     outputMessage($msg);
 }
 
