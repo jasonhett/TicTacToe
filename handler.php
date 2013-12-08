@@ -135,24 +135,33 @@ function handleShutdown()
 }
 
 function first_load(){
-    //looking to db for player pos
-    $player_pos = get_player_pos();
+    
     global $game_id;
     $game_id = get_game_id();
+
+    //looking to db for player pos
+    $player_pos = get_player_pos();
     #$GLOBALS['game_id'] = get_game_id();
     //set play pos
     $msg = "playerId" . "," . $player_pos;
     outputMessage($msg);
 }
+
+function register_player(){
+
+
+}
+
 function get_player_pos()
 {
     include "mysqlConnect.php";
     global $game_id;
     #$game_id = intval($GLOBALS['game_id']);
-    $sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$game_id'");
-    $currentPlayerCount = mysql_num_rows($sql);
+    #$sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$game_id'");
+    #$currentPlayerCount = mysql_num_rows($sql);
 
-    return $currentPlayerCount + 1;
+    mysql_query("INSERT INTO Players (game_ID) VALUES ($game_id)") or die(mysql_error());
+    return check_player_count();
     
 }
 
@@ -193,8 +202,7 @@ function get_play_value()
     $isGameExists = mysql_num_rows($sql);
     if($isGameExists){
         $row = mysql_fetch_array($sql);
-        $last_pos = strval($row['lastPos']);
-        return $row[$last_pos];
+        return $row['last_Player'];
     }
 
     return -1;
@@ -213,6 +221,7 @@ function get_game_id()
 
     $sqlQueryLastGame = mysql_query("SELECT * FROM Players WHERE game_ID = '$GameCount'");
     $playerCountOfTheGame = mysql_num_rows($sqlQueryLastGame);
+    
     if ($playerCountOfTheGame >= 3 ){
         makeNewGame();
         return $GameCount + 1;
@@ -220,6 +229,8 @@ function get_game_id()
 
     return $GameCount;
 }
+
+
 
 function makeNewGame()
 {
