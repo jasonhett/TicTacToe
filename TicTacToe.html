@@ -15,8 +15,6 @@
 table.table-tictactoe td {
 		font-size:48pt;
 		text-align:center;	
-		border-width:thick;
-		border-style:solid;
 	}
 </style>
   
@@ -27,45 +25,12 @@ table.table-tictactoe td {
 	<h1>Awesome Tic Tac Toe</h1>
 	</center>
 
+
+
 <div class="col-md-8">
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<table class = "table table-bordered table-tictactoe">
-				<tr>
-					<td id = "0" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "1" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "2" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "3" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "4" onClick="squareClicked(this)" height="100" width="100" ></td>
-				</tr>
-				<tr>
-					<td id = "5" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "6" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "7" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "8" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "9" onClick="squareClicked(this)" height="100" width="100" ></td>
-				</tr>
-				<tr>
-					<td id = "10" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "11" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "12" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "13" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "14" onClick="squareClicked(this)" height="100" width="100" ></td>
-				</tr>
-				<tr>
-					<td id = "15" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "16" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "17" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "18" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "19" onClick="squareClicked(this)" height="100" width="100" ></td>
-				</tr>
-				<tr>
-					<td id = "20" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "21" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "22" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "23" onClick="squareClicked(this)" height="100" width="100" ></td>
-					<td id = "24" onClick="squareClicked(this)" height="100" width="100" ></td>
-				</tr>
+			<table id = "table-tictactoe" class = "table table-bordered table-tictactoe">
 			</table>
 		</div>
 	</div>
@@ -99,16 +64,51 @@ table.table-tictactoe td {
 		
 		</div>
 	</div>
-	<div class="panel panel-default">
+	<div id="boardSize">
+		<fieldset>
+		<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<div class="row-fluid col-md-12">
+					<label class="control-label" for="column">Columns</label>
+					<select class="form-control col-md-8" id="column">
+					  <option>4</option>
+					  <option>5</option>
+					  <option>6</option>
+					  <option>7</option>
+					  <option>8</option>
+					  <option>9</option>
+					  <option>10</option>		  
+					</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="row-fluid col-md-12">
+					<label class="control-label" for="row">Rows</label>
+					<select class="form-control col-md-8" id="row">
+					  <option>4</option>
+					  <option>5</option>
+					  <option>6</option>
+					  <option>7</option>
+					  <option>8</option>
+					  <option>9</option>
+					  <option>10</option>		  
+					</select>
+					</div>
+				</div>
+		</form>
+		</fieldset>
+	</div>
+	<div class="panel panel-default">	
 		<div class="panel-body" style="text-align:center">
 			<button id="join" type="button" class="btn btn-success" onClick="joinGame()">Join Game</button>
 			<button id="quit" type="button" class="btn btn-danger" onClick="quitGame()">Quit Game</button>
 		</div>
 	</div>
-	
+
+	<center><h2>Message Center</h2></center>
 	<div class="panel panel-default">
-		<div class="panel-body" style="text-align:center">
-			<h3>Message Center</h3>
+		<div class="panel-body" style="text-align:left">
+			<b id="messageCenter">Select rows and columns, then click Join Game to begin playing.</b>
 		</div>
 	</div>	
 </div>
@@ -116,27 +116,24 @@ table.table-tictactoe td {
 
 <script>
 
+//initialize game parameters, still need to be set on join
 var playerNum = 1;
 var gamePiece = "X";
 var gameID = 0;
 var previousResponse ="";
 
-var resetRequest = false;
-
-var gameBoard = [
-				  0, 0, 0, 0, 0, //row 1
-				  0, 0, 0, 0, 0, //row 2
-				  0, 0, 0, 0, 0, //row 3
-				  0, 0, 0, 0, 0, //row 4
-				  0, 0, 0, 0, 0 //row 5
-				  ];
+//array representing gameBoard
+var gameBoard;
+var rows;
+var columns;
 
 var p1 = { name: "p1", number: Number(1), score: Number(0)};
 var p2 = { name: "p2", number: Number(2), score: Number(0)};
 var p3 = { name: "p3", number: Number(3), score: Number(0)};
 
 
-			  
+//loop to go through columns and calculate the player's score
+//needs the player variable, number of rows, and number of columns			  
 function getHorizontalScores(player) {
 	for (var row = 0; row < 25; row ++) {
 		for (var column = 0; column < 5 ; column += 5) {
@@ -150,6 +147,8 @@ function getHorizontalScores(player) {
 	}
 }
 
+//loop to go through rows and calculate the player's score
+//needs the player variable, number of rows, and number of columns	
 function getVerticalScores(player) {
 	for (var column = 0; column < 5; column++) {
 		for (var row = 0; row < 25 ; row+=5) {
@@ -166,6 +165,8 @@ function getVerticalScores(player) {
 	}
 }
 
+//loop to go through right diagonal columns and calculate the player's score
+//needs the player variable, number of rows, and number of columns	
 function getRightDiagonalScores(player) {
 	var startingPositions = [0,1,2,3,5,10,15];
 	startingPositions.forEach(function(start) {
@@ -183,6 +184,8 @@ function getRightDiagonalScores(player) {
 	});
 }
 
+//loop to go through left diagonal columns and calculate the player's score
+//needs the player variable, number of rows, and number of columns	
 function getLeftDiagonalScores(player) {
 	var startingPositions = [1,2,3,4,9,14,19];
 	startingPositions.forEach(function(start) {
@@ -258,17 +261,31 @@ function handleHttpResponse() {
 				// data from PHP returned in this order
 				var typeOfRequest = results[0];
 				if (typeOfRequest === "start") {
-					//output message game is starting
-					//undisable buttons if player turn
+
+				columns = results[1];
+				rows = results[2];
+				
+				createTable(columns, rows);
+				createGameBoard(rows, columns);				
+				
+				var message = "";
+				message += "<b>Gameboard is "+columns+"X"+rows+".</b><br/>";
+				if (playerNum == 1) { 
+					message += "<b>Game is ready. Please place your piece.</b><br/>";
+				}
+				else {
+					message += "<b>Game is ready. Player 1 is placing their piece.</b><br/>";
+				}
+				document.getElementById("messageCenter").innerHTML = message;
 				}
 				else if (typeOfRequest === "playerId") {
 					playerNum = results[1];
 					gameID = results[2];
 					
-					if (playerNum === 1) {
+					if (playerNum == 1) {
 						gamePiece = "X";
 					}
-					else if (playerNum === 2) {
+					else if (playerNum == 2) {
 						gamePiece = "Y";
 					}
 					else {
@@ -283,17 +300,45 @@ function handleHttpResponse() {
 					position = results[1]; 
 					value = results[2];	
 					turn = results[3]; 
+					gameBoard[position] = value;
+					updateBoard();
 				}
 				else {
 					position = results[1]; 
 					value = results[2];	
 					turn = results[3]; 
+					
+					gameBoard[position] = value;
+					updateBoard();
+					
+					var message = "";
+					message += "<u>Player "+value+" placed their piece.</u><br/>";
+					currentPlayerTurn = (value + 1) < 4 ? (value+1) : 1; 
+					if (currentPlayerTurn == playerNum) {	
+						message += "<b>Please place your piece.</b><br/>";
+					}
+					else {
+						message += "<b>Player "+(currentPlayerTurn)+" is placing their piece.</b><br/>";	
+					}
+					document.getElementById("messageCenter").innerHTML = message;
 				}     
 			}
 			previousResponse = http.responseText;
 		}
+}
 
-
+function updateBoard() {
+	for (var position = 0; position < (rows*columns); position++) {
+		if (gameBoard[position] == 1) {
+			document.getElementById(position).innerHTML = "X";
+		}
+		else if (gameBoard[position] == 2) {
+			document.getElementById(position).innerHTML = "Y";
+		}
+		else if (gameBoard[position] == 3) {
+			document.getElementById(position).innerHTML = "Z";
+		}
+	}
 }
 	
 function sendTurn(gridPosition) {
@@ -315,9 +360,8 @@ function sendTurn(gridPosition) {
 	
 	xmlhttp.open("POST", url, false);  
 	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-
 	xmlhttp.send(data);	
-
+	xmlhttp.onreadystatechange = handleHttpResponse;
 }
 
 function updateScores() {
@@ -334,8 +378,7 @@ function updateScores() {
 }
 
 function joinGame() {
-    /*http = createRequestObject;
-    startProcess('handler.php');*/
+
     // error handling
     var xmlhttp;
     if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
@@ -345,18 +388,51 @@ function joinGame() {
             xmlhttp = false;
         }
     }
+
     http = xmlhttp;
+
+    var data = "colSize" + $(column).val();
+	data += "&rowSize" + $(row).val();
 
     var url = "handler.php";
     http.open("POST", url , true);
     http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     http.onreadystatechange = handleHttpResponse;
-	http.send(null);
+	http.send(data);
+	$(join).prop('disabled', true);
+	$(boardSize).addClass('hidden')
     pollTimer = setInterval(handleHttpResponse, 1000);
 }
 
-function quitGame() {
+function createTable(rows, columns) { 
+	var tableData = "";
+	for (var index = 0; index < rows; index++) {
+		tableData += "<tr id='row"+index+"'>";
+			for (var index2 = 0; index2 < columns; index2++) {
+				tableData += '<td id = "'+(index*columns+index2)+'" onClick="squareClicked(this)" height="100" width="100" ></td>';
+			}
+	}
+	document.getElementById("table-tictactoe").innerHTML = tableData;
+}
 
+function createGameBoard(rows, columns) {
+	var positionsInArray = rows*columns;
+	gameBoard = new Array(positionsInArray);
+	var currentPosition = 0;
+	while (currentPosition < positionsInArray) {
+		gameBoard[currentPosition] = Number(0);
+		currentPosition++;
+	}
+}
+
+function quitGame() {
+	var data = "shutdown";
+    var url = "handler.php";
+    xmlhttp.open("POST", url , true);
+	xmlhttp.send(data);	
+	$(join).prop('disabled', false);
+	$(quit).prop('disabled', true);
+	$(boardSize).removeClass('hidden')
 }
 
 function squareClicked(clickedObject) {
