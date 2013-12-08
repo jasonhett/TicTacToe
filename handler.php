@@ -13,9 +13,6 @@ register_shutdown_function('handleShutdown');
 // Kickstart
 outputToBrowser( str_repeat( '.', KICKSTART_LENGTH ) );
 
-$colSize = intval($_POST['colSize']);
-$rowSize = intval($_POST['rowSize']);
-
 
 //setup player info
 $player_name= '';
@@ -35,10 +32,9 @@ while (1)
 
     if ($new_player_count >= 3)
     {
-        //returns row then col averge
-        $msg = "start" . "," . get_size_avg();
-
+        $msg = "start";
         //message browser that its ready to start
+        //Vote Averge
         outputMessage( $msg );
         break;
     }
@@ -74,7 +70,7 @@ while(1){
         $play_pos = get_play_pos();
         $play_value = get_play_value();
 
-        $msg = "turn" . $play_pos . "," . $play_value . "," . $turn_count;
+        $msg = "turn" ."," .$play_pos . "," . $play_value . "," . $turn_count;
 
         //push pos, value, new turn
         outputMessage($msg);
@@ -84,14 +80,6 @@ while(1){
     
     usleep( GAMES_CHECK_INTERVAL );
     #break; //debug usage
-}
-
-function get_size_avg(){
-    include "mysqlConnect.php";
-    global $game_id;
-    $sql = mysql_query("SELECT AVG(col_Choice) AS col_avg, AVG(row_Choice) AS row_avg FROM Players WHERE game_ID = '$game_id'");
-    $row = mysql_fetch_array($sql);
-    return $row['row_avg'] . "," . $row['col_avg'];
 }
 
 function waited_for_play(){
@@ -118,7 +106,7 @@ function check_player_count()
 function outputToBrowser($out)
 {
     echo $out;
-    #ob_flush();
+    ob_flush();
     flush();
 }
 
@@ -168,12 +156,12 @@ function register_player(){
 function get_player_pos()
 {
     include "mysqlConnect.php";
-    global $game_id, $rowSize, $colSize;
+    global $game_id;
     #$game_id = intval($GLOBALS['game_id']);
     #$sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$game_id'");
     #$currentPlayerCount = mysql_num_rows($sql);
 
-    mysql_query("INSERT INTO Players (game_ID, row_Choice, col_Choice) VALUES ($game_id, $rowSize, $colSize)") or die(mysql_error());
+    mysql_query("INSERT INTO Players (game_ID) VALUES ($game_id)") or die(mysql_error());
     return check_player_count();
     
 }

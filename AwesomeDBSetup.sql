@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS `AwesomeTicTacToe`.`Players` (
   `idPlayers` INT NOT NULL AUTO_INCREMENT,
   `player_Name` VARCHAR(45) NULL,
   `game_ID` INT NULL,
+  `row_Choice` INT NULL,
+  `col_Choice` INT NULL,
   PRIMARY KEY (`idPlayers`))
 ENGINE = InnoDB;
 
