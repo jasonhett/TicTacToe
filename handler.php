@@ -98,7 +98,7 @@ function gameover() {
     $tiles = $row_size * $col_size;
 
     //this will make sure that all players have fair number of turns.
-    if (get_turn_count() >= ($tiles - ($tiles % 3))){
+    if (get_turn_count() > ($tiles - ($tiles % 3))){
         return true;
     }
     else {
