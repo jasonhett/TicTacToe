@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `AwesomeTicTacToe`.`Players` (
   `game_ID` INT NULL,
   `row_Choice` INT NULL,
   `col_Choice` INT NULL,
+  `Active` INT NULL,
   PRIMARY KEY (`idPlayers`))
 ENGINE = InnoDB;
 
@@ -33,7 +34,8 @@ CREATE TABLE IF NOT EXISTS `AwesomeTicTacToe`.`Game` (
   `lastPos` INT NULL,
   `board_State` VARCHAR(100) NULL,
   `last_Player` INT NULL,
-  PRIMARY KEY (`idGame`))
+  PRIMARY KEY (`idGame`),
+  UNIQUE INDEX `idGame_UNIQUE` (`idGame` ASC))
 ENGINE = InnoDB;
 
 

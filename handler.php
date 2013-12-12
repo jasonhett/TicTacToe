@@ -21,7 +21,7 @@ $player_name= '';
 $player_id= -1;
 $turn_count= 0;
 $game_id =  -1;
-
+$ActivePlayer = array(1,1,1);
 //assign player position
 first_load();
 
@@ -50,18 +50,33 @@ while (1)
 //Once exited waiting for players while loop goes into game updating loop
 while(1){
     //end if turns greater than 25
-    global $total_cell_count;
+    global $total_cell_count,$ActivePlayer;
     if($turn_count > $total_cell_count){
         break;
     }
 
     //check for people exiting game;
     if(handleShutdown()){
-        $msg = "shutdown";
-        outputMessage($msg);
-        break;
+        //$msg = "shutdown";
+        //outputMessage($msg);
+        PlayerGoneUpdatedDB();
+        exit();
     }
     // check if anyone is gone, then output shutdown msg with who dropped.
+
+    include "mysqlConnect.php";
+
+    $sql = mysql_query("SELECT Active FROM Players WHERE game_ID = '$game_id'");
+
+    $currPlayer = 0;
+    while($row = mysql_fetch_array($sql)){
+        if ($ActivePlayer[$currPlayer] != $row['Active']){
+            $ActivePlayer[$currPlayer] = $row['Acitve'];
+            $playerDropped = $currPlayer+1;
+            $msg = "PlayerDroped" . "," . $playerDropped;
+            outputMessage($msg);
+        }
+    }
 
     //get new turn count
     $new_turn_count = get_turn_count();
@@ -94,6 +109,14 @@ while(1){
     #break; //debug usage
 }
 
+function PlayerGoneUpdatedDB(){
+    include "mysqlConnect.php";
+    global $player_id;
+    
+    $NotActive = 0;
+    $sql = mysql_query("UPDATE Players SET Active = '$NotActive' WHERE idGame = '$player_id'");
+
+}
 function gameover() {
     global $row_size, $col_size;
     $tiles = $row_size * $col_size;
@@ -193,12 +216,13 @@ function register_player(){
 function get_player_pos()
 {
     include "mysqlConnect.php";
-    global $game_id,$row_size,$col_size;
+    global $game_id,$row_size,$col_size,$player_id;
     #$game_id = intval($GLOBALS['game_id']);
     #$sql = mysql_query("SELECT * FROM Players WHERE game_ID = '$game_id'");
     #$currentPlayerCount = mysql_num_rows($sql);
-
-    mysql_query("INSERT INTO Players (game_ID, row_Choice, col_Choice) VALUES ($game_id,$row_size,$col_size)") or die(mysql_error());
+    $Active = 1;
+    mysql_query("INSERT INTO Players (game_ID, row_Choice, col_Choice, Active) VALUES ($game_id,$row_size,$col_size,$Active)") or die(mysql_error());
+    $player_id = mysql_insert_id();
     return check_player_count();
     
 }
