@@ -77,14 +77,34 @@ while(1){
 
         $msg = "turn" ."," .$play_pos . "," . $play_value . "," . $turn_count;
 
-        //push pos, value, new turn
-        outputMessage($msg);
+        if(!gameover()){
+            //push pos, value, new turn
+            outputMessage($msg);
+        }
+        else {
+            $msg = "gameover";
+            outputMessage($msg);
+        }
+
 
     }
 
     
     usleep( GAMES_CHECK_INTERVAL );
     #break; //debug usage
+}
+
+function gameover() {
+    global $row_size, $col_size;
+    $tiles = $row_size * $col_size;
+
+    //this will make sure that all players have fair number of turns.
+    if (get_turn_count() > ($tiles - ($tiles % 3))){
+        return true;
+    }
+    else {
+        false;
+    }
 }
 
 function getSizeAverage(){

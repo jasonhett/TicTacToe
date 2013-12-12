@@ -325,6 +325,9 @@ function handleHttpResponse() {
 					gameBoard[position] = value;
 					updateBoard();
 				}
+                else if (typeOfRequest === "gameover") {
+                    endofgame();
+                }
 				else {
 					position = results[1]; 
 					value = results[2];	
@@ -347,6 +350,34 @@ function handleHttpResponse() {
 			}
 			previousResponse = http.responseText;
 		}
+}
+
+function endofgame() {
+
+    //calc final scores
+    updateScores();
+
+    //determine the winner
+    determineWinner();
+
+}
+
+function determineWinner() {
+    var message = "";
+
+    if (p1.score > p2.score && p1.score > p3.score) {
+        message += "<b>Player 1 Wins!!</b><br/>";
+    }
+    else if (p2.score > p1.score && p2.score > p3.score) {
+        message += "<b>Player 2 Wins!!</b><br/>";
+    }
+    else if (p3.score > p1.score && p3.score > p2.score){
+        message += "<b>Player 3Wins!!</b><br/>";
+    }
+    else {
+        message += "<b>There was a tie!</b><br/>";
+    }
+    document.getElementById("messageCenter").innerHTML = message;
 }
 
 function updateBoard() {
