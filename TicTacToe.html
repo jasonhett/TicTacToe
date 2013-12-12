@@ -135,8 +135,9 @@ var p3 = { name: "p3", number: Number(3), score: Number(0)};
 //loop to go through columns and calculate the player's score
 //needs the player variable, number of rows, and number of columns			  
 function getHorizontalScores(player) {
-	for (var row = 0; row < 25; row ++) {
-		for (var column = 0; column < 5 ; column += 5) {
+	var totalCells = rows*columns;
+	for (var row = 0; row < totalCells; row ++) {
+		for (var column = 0; column < columns ; column += columns) {
 			var pointValue = 1;
 			while (gameBoard[row + column] === player.number && column < 5) {
 				player.score += pointValue;
@@ -150,15 +151,16 @@ function getHorizontalScores(player) {
 //loop to go through rows and calculate the player's score
 //needs the player variable, number of rows, and number of columns	
 function getVerticalScores(player) {
-	for (var column = 0; column < 5; column++) {
-		for (var row = 0; row < 25 ; row+=5) {
+	var totalCells = rows*columns;
+	for (var column = 0; column < totalCells; column++) {
+		for (var row = 0; row < totalCells ; row+=rows) {
 			var pointValue = 1;
 			var length = 0;
-			while (gameBoard[column + row] === player.number && row < 25) {
+			while (gameBoard[column + row] === player.number && row < totalCells) {
 				length++;
 				player.score += pointValue;
 				pointValue++;
-				row+=5;
+				row+=rows;
 			}
 			if (length === 1) {player.score--;}
 		}
@@ -168,16 +170,26 @@ function getVerticalScores(player) {
 //loop to go through right diagonal columns and calculate the player's score
 //needs the player variable, number of rows, and number of columns	
 function getRightDiagonalScores(player) {
+	var totalCells = rows*columns;
 	var startingPositions = [0,1,2,3,5,10,15];
+
+	for ( var i = 0 ; i < columns-1; ++i){
+		startingPositions.push(i);
+	}
+
+	for ( var i = columns ; i < totalCells ; i += columns){
+		startingPositions.push(i);
+	}
+
 	startingPositions.forEach(function(start) {
-		for (var position = start; position < 25; position += 6) {
+		for (var position = start; position < totalCells; position += columns+1) {
 			var pointValue = 1;
 			var length = 0;
-			while (gameBoard[position] === player.number && position < 25) {
+			while (gameBoard[position] === player.number && position < totalCells) {
 				length++;
 				player.score += pointValue;
 				pointValue++;
-				position+=6;
+				position+=columns+1;
 			}
 			if (length === 1) {player.score--;}
 		}
@@ -187,16 +199,26 @@ function getRightDiagonalScores(player) {
 //loop to go through left diagonal columns and calculate the player's score
 //needs the player variable, number of rows, and number of columns	
 function getLeftDiagonalScores(player) {
-	var startingPositions = [1,2,3,4,9,14,19];
+	var totalCells = rows*columns;
+	var startingPositions = [];
+
+	for (var i = 1; i < columns-1; ++i){
+		startingPositions.push(i);
+	}
+
+	for (var i = 2*columns - 1 ; i < totalCells ; i+= columns){
+		startingPositions.push(i);
+	}
+
 	startingPositions.forEach(function(start) {
-		for (var position = start; position < 25; position += 4) {
+		for (var position = start; position < totalCells; position += columns-1) {
 			var pointValue = 1;
 			var length = 0;
-			while (gameBoard[position] === player.number && position < 25) {
+			while (gameBoard[position] === player.number && position < totalCells) {
 				length++;
 				player.score += pointValue;
 				pointValue++;
-				position+=4;
+				position+=columns-1;
 			}
 			if (length === 1) {player.score--;}
 		}
@@ -368,6 +390,8 @@ function updateScores() {
 	players = [p1, p2, p3];
 	players.forEach(function(player) {
 		player.score = 0;
+
+		//Place to do the score update
 		getHorizontalScores(player);
 		getVerticalScores(player);
 		getRightDiagonalScores(player);

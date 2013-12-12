@@ -61,6 +61,7 @@ while(1){
         outputMessage($msg);
         break;
     }
+    // check if anyone is gone, then output shutdown msg with who dropped.
 
     //get new turn count
     $new_turn_count = get_turn_count();
