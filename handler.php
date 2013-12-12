@@ -114,7 +114,7 @@ function PlayerGoneUpdatedDB(){
     global $player_id;
     
     $NotActive = 0;
-    $sql = mysql_query("UPDATE Players SET Active = '$NotActive' WHERE idGame = '$player_id'");
+    $sql = mysql_query("UPDATE Players SET Active = '$NotActive' WHERE idPlayers = '$player_id'");
 
 }
 function gameover() {
