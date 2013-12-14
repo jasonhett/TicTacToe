@@ -44,6 +44,7 @@ while (1)
 
     // Pause before next iteration
     usleep( JOINS_CHECK_INTERVAL );
+	outputMessage("In wait loop");
     #break; //debug usage
 }
 
@@ -71,9 +72,9 @@ while(1){
     $currPlayer = 0;
     while($row = mysql_fetch_array($sql)){
         if ($ActivePlayer[$currPlayer] != $row['Active']){
-            $ActivePlayer[$currPlayer] = $row['Acitve'];
+            $ActivePlayer[$currPlayer] = $row['Active'];
             $playerDropped = $currPlayer+1;
-            $msg = "PlayerDroped" . "," . $playerDropped;
+            $msg = "PlayerDropped" . "," . $playerDropped;
             outputMessage($msg);
         }
     }
