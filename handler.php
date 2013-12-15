@@ -44,7 +44,7 @@ while (1)
 
     // Pause before next iteration
     usleep( JOINS_CHECK_INTERVAL );
-	outputMessage("In wait loop");
+	//outputMessage("In wait loop");
     #break; //debug usage
 }
 
