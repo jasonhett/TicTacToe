@@ -121,6 +121,7 @@ var playerNum = 1;
 var gamePiece = "X";
 var gameID = 0;
 var previousResponse ="";
+var gameOver = false;
 
 //array representing gameBoard
 var gameBoard;
@@ -336,6 +337,7 @@ function handleHttpResponse() {
 					
 					gameBoard[position] = value;
 					updateBoard();
+					updateScores();
 					
 					var message = "";
 					message += "<u>Player "+value+" placed their piece.</u><br/>";
@@ -355,6 +357,7 @@ function handleHttpResponse() {
 
 function endofgame() {
 
+	gameOver = true;
     //calc final scores
     updateScores();
 
@@ -492,13 +495,18 @@ function quitGame() {
 }
 
 function squareClicked(clickedObject) {
-	if (clickedObject.innerHTML < 1) {
-		clickedObject.innerHTML = gamePiece;
-		gameBoard[clickedObject.id] = playerNum;
-		sendTurn(clickedObject.id);
+	if (gameOver === false) {
+		if (clickedObject.innerHTML < 1) {
+			clickedObject.innerHTML = gamePiece;
+			gameBoard[clickedObject.id] = playerNum;
+			sendTurn(clickedObject.id);
+		}
+		else {
+			alert("Please select a free space.");
+		}
 	}
 	else {
-		alert("Please select a free space.");
+		alert("Cannot place another piece until game is reset.");
 	}
 }
 
