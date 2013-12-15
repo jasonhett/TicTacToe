@@ -140,7 +140,7 @@ function getHorizontalScores(player) {
 	for (var row = Number(0); row < rows; row ++) {
 		for (var column = Number(0); column < totalCells ; column += columns) {
 			var pointValue = 1;
-			while (gameBoard[row + column] === player.number && column =< columns) {
+			while (gameBoard[row + column] === player.number && column <= columns) {
 				player.score += pointValue;
 				pointValue++;
 				column++;
