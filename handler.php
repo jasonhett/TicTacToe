@@ -22,6 +22,7 @@ $player_id= -1;
 $turn_count= 0;
 $game_id =  -1;
 $ActivePlayer = array(1,1,1);
+
 //assign player position
 first_load();
 
@@ -92,16 +93,13 @@ while(1){
         $play_value = get_play_value();
 
         $msg = "turn" ."," .$play_pos . "," . $play_value . "," . $turn_count;
+        outputMessage($msg);
 
-        if(!gameover()){
-            //push pos, value, new turn
-            outputMessage($msg);
-        }
-        else {
+        if(gameover()){
             $msg = "gameover";
             outputMessage($msg);
+            exit();
         }
-
 
     }
 
