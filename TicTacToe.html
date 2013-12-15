@@ -272,9 +272,9 @@ function handleHttpResponse() {
 		if (previousResponse != http.responseText){
 			var outputResponse;
 			console.log('got into spliting msg');
-			outputResponse = http.responseText.replace(previousResponse,'');
-			outputResponse = outputResponse.replace('#','');
-			outputResponse = outputResponse.replace('.','');
+			outputResponse = http.responseText.replace(previousResponse,'','g');
+			outputResponse = outputResponse.replace('#','', 'g');
+			outputResponse = outputResponse.replace('.','','g');
 
 			console.log('Output' + outputResponse);
 
