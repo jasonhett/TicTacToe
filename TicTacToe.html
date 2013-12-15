@@ -324,7 +324,7 @@ function handleHttpResponse() {
 					position = results[1]; 
 					value = results[2];	
 					turn = results[3]; 
-					gameBoard[position] = value;
+					gameBoard[position] = Number(value);
 					updateBoard();
 				}
                 else if (typeOfRequest === "gameover") {
@@ -335,7 +335,7 @@ function handleHttpResponse() {
 					value = results[2];	
 					turn = results[3]; 
 					
-					gameBoard[position] = value;
+					gameBoard[position] = Number(value);
 					updateBoard();
 					//updateScores();
 					
