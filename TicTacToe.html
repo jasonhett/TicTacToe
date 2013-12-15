@@ -426,7 +426,8 @@ function sendTurn(gridPosition) {
 
 function updateScores() {
 	players = [p1, p2, p3];
-	players.forEach(function(player) {
+	player = p1;
+	//players.forEach(function(player) {
 		player.score = 0;
 
 		//Place to do the score update
@@ -436,7 +437,7 @@ function updateScores() {
 		getLeftDiagonalScores(player);
 		scoreField =  player.name +"Score";
 		document.getElementById(scoreField).innerHTML = player.score;
-	});
+	//});
 }
 
 function joinGame() {
