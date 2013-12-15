@@ -96,6 +96,7 @@ while(1){
         outputMessage($msg);
 
         if(gameover()){
+            sleep(1);
             $msg = "gameover";
             outputMessage($msg);
             exit();
