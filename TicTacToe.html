@@ -137,7 +137,7 @@ var p3 = { name: "p3", number: Number(3), score: Number(0)};
 //needs the player variable, number of rows, and number of columns			  
 function getHorizontalScores(player) {
 	var totalCells = rows*columns;
-	for (var row = Number(0); row < totalCells; row ++) {
+	for (var row = Number(0); row < rows; row ++) {
 		for (var column = Number(0); column < columns ; column += columns) {
 			var pointValue = 1;
 			while (gameBoard[row + column] === player.number && column < 5) {
@@ -153,7 +153,7 @@ function getHorizontalScores(player) {
 //needs the player variable, number of rows, and number of columns	
 function getVerticalScores(player) {
 	var totalCells = rows*columns;
-	for (var column = Number(0); column < totalCells; column++) {
+	for (var column = Number(0); column < columns; column++) {
 		for (var row = Number(0); row < totalCells ; row+=rows) {
 			var pointValue = 1;
 			var length = 0;
