@@ -126,6 +126,7 @@ var currentPlayerTurn = 1;
 
 //array representing gameBoard
 var gameBoard;
+var cellLookedAt;
 var rows;
 var columns;
 
@@ -150,6 +151,39 @@ function getHorizontalScores(player) {
 	}
 }
 
+function countSingleTileScore(player){
+	var totalCells = Number(rows* columns);
+
+	for ( var iRow = Number(0) ; iRow < rows; ++iRow){
+		for (var iCol = Number(0) ; iCol < columns ; ++iCol){
+			var iPos = Number(iRow*columns + iCol);
+			if(player.number == gameBoard[iPos]){
+				if(isTileSingle(iPos,iCol,iRow))
+					player.score += 1;
+			}
+		}
+	}
+}
+
+function isTileSingle(iPos,iCol,iRow){
+	if(cellLookedAt[iPos])
+		return false;
+
+	if(iCol != Number(0) && gameBoard[iPos-1] == gameBoard[iPos])
+		return false;
+
+	if(iRow != Number(0) && gameBoard[iPos- columns ] == gameBoard[iPos])
+		return false;
+
+	if(iCol != columns-1 && gameBoard[iPos+1] == gameBoard[iPos])
+		return false;
+
+	if(iRow != rows-1 && gameBoard[iPos+columns] == gameBoard[iPos])
+		return false;
+
+	return true;
+}
+
 function getHorScore(player){
 
 	var totalCells = Number(rows* columns);
@@ -166,7 +200,15 @@ function getHorScore(player){
 				var pointValue = Number(1);
 				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
 					bBoardChecked[iPos] = true;
-					player.score += pointValue;
+					cellLookedAt[iPos] = true;
+
+					if((cellLookedAt[iPos] && pointValue == Number(1) )){
+
+					}
+					else{
+						player.score += pointValue;
+					}
+					
 					pointValue++; 
 					iPos++;
 				}
@@ -191,7 +233,15 @@ function getVerScore(player){
 				var pointValue = Number(1);
 				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
 					bBoardChecked[iPos] = true;
-					player.score += pointValue;
+
+					cellLookedAt[iPos] = true;
+					if( (cellLookedAt[iPos] && pointValue == Number(1) )){
+
+					}
+					else{
+						player.score += pointValue;
+					}
+					
 					pointValue++; 
 					iPos+=columns;
 				}
@@ -216,7 +266,11 @@ function getRightDiagScore(player){
 				var pointValue = Number(1);
 				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
 					bBoardChecked[iPos] = true;
-					player.score += pointValue;
+					if(isTileSingle(iPos,iCol,iRow)){
+
+					}else{
+						player.score += pointValue;
+					}
 					pointValue++; 
 					iPos= iPos +columns+Number(1);
 				}
@@ -242,7 +296,13 @@ function getLeftDiagScore(player){
 				var pointValue = Number(1);
 				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
 					bBoardChecked[iPos] = true;
-					player.score += pointValue;
+					if(isTileSingle(iPos,iCol,iRow)){
+
+					}
+					else
+					{
+						player.score += pointValue;
+					}
 					pointValue++; 
 					iPos= iPos +columns-Number(1);
 				}
@@ -527,21 +587,35 @@ function sendTurn(gridPosition) {
 	xmlhttp.onreadystatechange = handleHttpResponse;
 }
 
+function initLookedAt(){
+	cellLookedAt = []
+
+	var totalCells = Number(rows*columns);
+
+	for ( var iPos = Number(0) ; iPos < totalCells ; ++iPos){
+		cellLookedAt[iPos] = false;
+
+	}
+}
+
 function updateScores() {
 	players = [p1, p2, p3];
 	
 	players.forEach(function(player) {
 		player.score = 0;
 
-		//getHorScore(player);
-		//getVerScore(player);
-		getRightDiagScore(player);
+		initLookedAt();
+		getHorScore(player);
+		getVerScore(player);
+		//getRightDiagScore(player);
 		//getLeftDiagScore(player);
 		//Place to do the score update
 		//getHorizontalScores(player);
 		//getVerticalScores(player);
 		//getRightDiagonalScores(player);
 		//getLeftDiagonalScores(player);
+
+		countSingleTileScore(player);
 		scoreField =  player.name +"Score";
 		document.getElementById(scoreField).innerHTML = player.score;
 	});
