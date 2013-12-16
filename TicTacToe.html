@@ -161,7 +161,7 @@ function getHorScore(player){
 	for ( var iRow = Number(0) ; iRow < rows; ++iRow){
 		for (var iCol = Number(0) ; iCol < columns ; ++iCol){
 			var iPos = Number(iRow*columns + iCol);
-			var maxPos = (iPos+columns)
+			var maxPos = Number(iRow*columns+columns);
 			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
 				var pointValue = Number(1);
 				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
