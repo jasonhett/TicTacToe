@@ -52,7 +52,7 @@ while (1)
 //Once exited waiting for players while loop goes into game updating loop
 while(1){
     //end if turns greater than 25
-    global $total_cell_count,$ActivePlayer;
+    global $total_cell_count,$ActivePlayer, $game_id;
     if($turn_count > $total_cell_count){
         break;
     }
@@ -80,7 +80,7 @@ while(1){
         }
     }
 
-    $sql = mysql_query("SELECT Active FROM Game WHERE game_ID = '$game_id'");
+    $sql = mysql_query("SELECT * FROM Game WHERE game_ID = '$game_id'");
     $row = mysql_fetch_array($sql);
     if($row['Active'] == 0){
         $msg = "shutdown" . "," . "dummymessage";
