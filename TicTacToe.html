@@ -346,7 +346,8 @@ function handleHttpResponse() {
 					}
 				}
 				else if (typeOfRequest === "shutdown") {
-
+					alert("A player left. Game is ended.");
+					$(boardSize).addClass('hidden');					
 				}
 				else if (typeOfRequest === "autoPlay") {
 					//output autoplay message
