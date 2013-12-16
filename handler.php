@@ -83,8 +83,9 @@ while(1){
     $sql = mysql_query("SELECT Active FROM Game WHERE game_ID = '$game_id'");
     $row = mysql_fetch_array($sql);
     if($row['Active'] == 0){
-        $msg = "shutdown";
+        $msg = "shutdown" . "," . "dummymessage";
         outputMessage($msg);
+        exit();
     }
 
     //get new turn count
