@@ -142,7 +142,7 @@ function getScores(player) {
 	for (var row = Number(0); row < rows; row ++) {
 		for (var column = Number(0); column < totalCells ; column += columns) {
 			var currentPos = row+column;
-			var pointValue = 0;
+			var pointValue = 1;
 			if (gameBoard[currentPos] == player.number) {
 				if ( gameBoard[currentPos] == gameBoard[currentPos -1]) {
 					pointValue++;
