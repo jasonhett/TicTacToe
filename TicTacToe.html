@@ -451,7 +451,7 @@ function quitGame() {
 	}
 
 	var data = "shutdown=" + playerNum;
-	data += "&game" + gameID;
+	data += "&game=" + gameID;
     var url = "quit.php";
 	
     xmlhttp.open("POST", url, false);  
