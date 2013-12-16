@@ -166,9 +166,8 @@ function countSingleTileScore(player){
 }
 
 function isTileSingle(iPos,iCol,iRow){
-	if(cellLookedAt[iPos])
-		return false;
 
+	totalCells = Number(rows*columns);
 	if(iCol != Number(0) && gameBoard[iPos-1] == gameBoard[iPos])
 		return false;
 
@@ -179,6 +178,19 @@ function isTileSingle(iPos,iCol,iRow){
 		return false;
 
 	if(iRow != rows-1 && gameBoard[iPos+columns] == gameBoard[iPos])
+		return false;
+
+	if( (iPos - (columns + 1) >= 0 ) && gameBoard[iPos - (columns + 1 ) ] == gameBoard[iPos]){
+		return false;
+	}
+
+	if( (iPos + (columns + 1) <  totalCells ) && gameBoard[iPos + (columns + 1 ) ] == gameBoard[iPos])
+		return false;
+
+	if( (iPos - (columns - 1) >= 0 ) && gameBoard[iPos - (columns - 1 ) ] == gameBoard[iPos])
+		return false;
+
+	if( (iPos + (columns - 1) < totalCells ) && gameBoard[iPos + (columns - 1 ) ] == gameBoard[iPos])
 		return false;
 
 	return true;
@@ -203,7 +215,9 @@ function getHorScore(player){
 					cellLookedAt[iPos] = true;
 
 					if((cellLookedAt[iPos] && pointValue == Number(1) )){
-
+						if((iPos+Number(1) < maxPos)&&gameBoard[iPos] == gameBoard[iPos+1]){
+							player.score+=pointValue;
+						}
 					}
 					else{
 						player.score += pointValue;
@@ -236,7 +250,9 @@ function getVerScore(player){
 
 					cellLookedAt[iPos] = true;
 					if( (cellLookedAt[iPos] && pointValue == Number(1) )){
-
+						if((iPos+columns < totalCells)&&gameBoard[iPos] == gameBoard[iPos+columns]){
+							player.score+=pointValue;
+						}
 					}
 					else{
 						player.score += pointValue;
@@ -266,11 +282,18 @@ function getRightDiagScore(player){
 				var pointValue = Number(1);
 				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
 					bBoardChecked[iPos] = true;
-					if(isTileSingle(iPos,iCol,iRow)){
 
-					}else{
+					cellLookedAt[iPos] = true;
+
+					if((cellLookedAt[iPos] && pointValue == Number(1) )){
+						if((iPos+columns+Number(1) < maxPos)&&gameBoard[iPos] == gameBoard[iPos+columns+ Number(1)]){
+							player.score+=pointValue;
+						}
+					}
+					else{
 						player.score += pointValue;
 					}
+
 					pointValue++; 
 					iPos= iPos +columns+Number(1);
 				}
@@ -296,13 +319,18 @@ function getLeftDiagScore(player){
 				var pointValue = Number(1);
 				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
 					bBoardChecked[iPos] = true;
-					if(isTileSingle(iPos,iCol,iRow)){
+					
+					cellLookedAt[iPos] = true;
 
+					if((cellLookedAt[iPos] && pointValue == Number(1) )){
+						if((iPos+columns-Number(1) < maxPos)&&gameBoard[iPos] == gameBoard[iPos+columns- Number(1)]){
+							player.score+=pointValue;
+						}
 					}
-					else
-					{
+					else{
 						player.score += pointValue;
 					}
+
 					pointValue++; 
 					iPos= iPos +columns-Number(1);
 				}
@@ -607,8 +635,8 @@ function updateScores() {
 		initLookedAt();
 		getHorScore(player);
 		getVerScore(player);
-		//getRightDiagScore(player);
-		//getLeftDiagScore(player);
+		getRightDiagScore(player);
+		getLeftDiagScore(player);
 		//Place to do the score update
 		//getHorizontalScores(player);
 		//getVerticalScores(player);
