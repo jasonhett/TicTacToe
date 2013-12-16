@@ -163,7 +163,7 @@ function getHorScore(player){
 			var iPos = iRow*columns + iCol;
 			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
 				var pointValue = Number(1);
-				while(bBoardChecked[iPos] == false){
+				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number){
 					bBoardChecked[iPos] = true;
 					player.score += pointValue;
 					pointValue++; 
