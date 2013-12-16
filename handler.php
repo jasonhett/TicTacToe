@@ -68,7 +68,7 @@ while(1){
 
     include "mysqlConnect.php";
 
-    $sql = mysql_query("SELECT Active FROM Players WHERE game_ID = '$game_id'");
+    $sql = mysql_query("SELECT Active FROM Players WHERE idGame = '$game_id'");
 
     $currPlayer = 0;
     while($row = mysql_fetch_array($sql)){
@@ -80,7 +80,7 @@ while(1){
         }
     }
 
-    $sql = mysql_query("SELECT * FROM Game WHERE game_ID = '$game_id'");
+    $sql = mysql_query("SELECT * FROM Game WHERE idGame = '$game_id'");
     $row = mysql_fetch_array($sql);
     if($row['Active'] == 0){
         $msg = "shutdown" . "," . "dummymessage";
