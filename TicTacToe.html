@@ -519,7 +519,12 @@ function handleHttpResponse() {
 						message += "<b>Please place your piece.</b><br/>";
 					}
 					else {
-						message += "<b>Player "+(currentPlayerTurn)+" is placing their piece.</b><br/>";	
+						if(Number(playerNum) == currentPlayerTurn ){
+							message += "<b style="color:red;">Your turn to place a piece on the board!</b>"
+						}
+						else{
+							message += "<b>Player "+(currentPlayerTurn)+" is placing their piece.</b><br/>";	
+						}
 					}
 					document.getElementById("messageCenter").innerHTML = message;
 
