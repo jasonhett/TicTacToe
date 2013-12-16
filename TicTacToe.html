@@ -200,6 +200,57 @@ function getVerScore(player){
 	}
 }
 
+function getRightDiagScore(player){
+
+	var totalCells = Number(rows* columns);
+	var bBoardChecked = [];
+	for (var pos = Number(0) ; pos < totalCells ; ++pos){
+		bBoardChecked[pos] = false;
+	}
+	
+	for ( var iRow = Number(0) ; iRow < rows; ++iRow){
+		for (var iCol = Number(0) ; iCol < columns ; ++iCol){
+			var iPos = Number(iRow*columns + iCol);
+			var maxPos = totalCells;
+			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
+				var pointValue = Number(1);
+				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
+					bBoardChecked[iPos] = true;
+					player.score += pointValue;
+					pointValue++; 
+					iPos= iPos +columns+Number(1);
+				}
+			}
+		}
+	}
+	
+}
+
+function getLeftDiagScore(player){
+
+	var totalCells = Number(rows* columns);
+	var bBoardChecked = [];
+	for (var pos = Number(0) ; pos < totalCells ; ++pos){
+		bBoardChecked[pos] = false;
+	}
+	
+	for ( var iRow = Number(0) ; iRow < rows; ++iRow){
+		for (var iCol = Number(0) ; iCol < columns ; ++iCol){
+			var iPos = Number(iRow*columns + iCol);
+			var maxPos = totalCells;
+			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
+				var pointValue = Number(1);
+				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
+					bBoardChecked[iPos] = true;
+					player.score += pointValue;
+					pointValue++; 
+					iPos= iPos +columns-Number(1);
+				}
+			}
+		}
+	}
+}
+
 //loop to go through rows and calculate the player's score
 //needs the player variable, number of rows, and number of columns	
 function getVerticalScores(player) {
@@ -483,7 +534,9 @@ function updateScores() {
 		player.score = 0;
 
 		//getHorScore(player);
-		getVerScore(player);
+		//getVerScore(player);
+		getRightDiagScore(player);
+		//getLeftDiagScore(player);
 		//Place to do the score update
 		//getHorizontalScores(player);
 		//getVerticalScores(player);
