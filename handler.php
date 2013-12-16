@@ -80,6 +80,13 @@ while(1){
         }
     }
 
+    $sql = mysql_query("SELECT Active FROM Game WHERE game_ID = '$game_id'");
+    $row = mysql_fetch_array($sql);
+    if($row['Active'] == 0){
+        $msg = "shutdown";
+        outputMessage($msg);
+    }
+
     //get new turn count
     $new_turn_count = get_turn_count();
 
@@ -111,7 +118,7 @@ while(1){
 function PlayerGoneUpdatedDB(){
     include "mysqlConnect.php";
     global $player_id;
-    
+
     $NotActive = 0;
     $sql = mysql_query("UPDATE Players SET Active = '$NotActive' WHERE idPlayers = '$player_id'");
 
