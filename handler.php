@@ -104,11 +104,14 @@ while(1){
 
         if(gameover()){
             $msg = "endOfGameTurn" ."," .$play_pos . "," . $play_value . "," . $turn_count;
+            outputMessage($msg);
+            exit();
         }
         else {
             $msg = "turn" ."," .$play_pos . "," . $play_value . "," . $turn_count;
+            outputMessage($msg);
         }
-        outputMessage($msg);
+
     }
 
     
