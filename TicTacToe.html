@@ -456,7 +456,7 @@ function quitGame() {
 	
     xmlhttp.open("POST", url, false);  
 	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	xmlhttp.send(data);	
+	xmlhttp.send(data);
 	xmlhttp.onreadystatechange = handleHttpResponse;
 
 	$(join).prop('disabled', false);
