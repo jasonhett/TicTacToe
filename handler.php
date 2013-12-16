@@ -52,7 +52,7 @@ while (1)
 //Once exited waiting for players while loop goes into game updating loop
 while(1){
     //end if turns greater than 25
-    global $total_cell_count,$ActivePlayer;
+    global $total_cell_count,$ActivePlayer, $game_id;
     if($turn_count > $total_cell_count){
         break;
     }
@@ -68,7 +68,7 @@ while(1){
 
     include "mysqlConnect.php";
 
-    $sql = mysql_query("SELECT Active FROM Players WHERE game_ID = '$game_id'");
+    $sql = mysql_query("SELECT Active FROM Players WHERE idGame = '$game_id'");
 
     $currPlayer = 0;
     while($row = mysql_fetch_array($sql)){
@@ -80,7 +80,7 @@ while(1){
         }
     }
 
-    $sql = mysql_query("SELECT Active FROM Game WHERE game_ID = '$game_id'");
+    $sql = mysql_query("SELECT * FROM Game WHERE idGame = '$game_id'");
     $row = mysql_fetch_array($sql);
     if($row['Active'] == 0){
         $msg = "shutdown" . "," . "dummymessage";
@@ -104,11 +104,14 @@ while(1){
 
         if(gameover()){
             $msg = "endOfGameTurn" ."," .$play_pos . "," . $play_value . "," . $turn_count;
+            outputMessage($msg);
+            exit();
         }
         else {
             $msg = "turn" ."," .$play_pos . "," . $play_value . "," . $turn_count;
+            outputMessage($msg);
         }
-        outputMessage($msg);
+
     }
 
     

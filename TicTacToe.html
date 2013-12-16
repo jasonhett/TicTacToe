@@ -135,23 +135,6 @@ var p2 = { name: "p2", number: Number(2), score: Number(0)};
 var p3 = { name: "p3", number: Number(3), score: Number(0)};
 
 
-//loop to go through columns and calculate the player's score
-//needs the player variable, number of rows, and number of columns			  
-function getScores(player) {
-	player.score = 0;
-	var totalCells = rows*columns;
-	for (var row = Number(0); row < rows; row ++) {
-		for (var column = Number(0); column < totalCells ; column += columns) {
-<<<<<<< HEAD
-			var pointValue = 1;
-			while (gameBoard[row + column] === player.number && column <= columns) {
-				player.score += pointValue;
-				pointValue++;
-				column++;
-			}								
-		}
-	}
-}
 
 function countSingleTileScore(player){
 	var totalCells = Number(rows* columns);
@@ -487,6 +470,8 @@ function endofgame() {
 
     //determine the winner
     determineWinner();
+	alert("Click ok to restart game.");
+	window.location.reload();
 
 }
 
@@ -543,6 +528,7 @@ function sendTurn(gridPosition) {
 	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	xmlhttp.send(data);	
 	xmlhttp.onreadystatechange = handleHttpResponse;
+	currentPlayerTurn = (currentPlayerTurn + 1) < 4 ? (currentPlayerTurn+1) : 1; 
 }
 
 function initLookedAt(){
@@ -639,12 +625,12 @@ function quitGame() {
 	}
 
 	var data = "shutdown=" + playerNum;
-	date += "&game" + gameID;
+	data += "&game=" + gameID;
     var url = "quit.php";
 	
     xmlhttp.open("POST", url, false);  
 	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	xmlhttp.send(data);	
+	xmlhttp.send(data);
 	xmlhttp.onreadystatechange = handleHttpResponse;
 
 	$(join).prop('disabled', false);
