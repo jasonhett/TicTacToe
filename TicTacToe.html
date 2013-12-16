@@ -136,124 +136,44 @@ var p3 = { name: "p3", number: Number(3), score: Number(0)};
 
 //loop to go through columns and calculate the player's score
 //needs the player variable, number of rows, and number of columns			  
-function getHorizontalScores(player) {
+function getScores(player) {
+	player.score = 0;
 	var totalCells = rows*columns;
 	for (var row = Number(0); row < rows; row ++) {
 		for (var column = Number(0); column < totalCells ; column += columns) {
-			var pointValue = 1;
-			while (gameBoard[row + column] === player.number && column <= columns) {
-				player.score += pointValue;
-				pointValue++;
-				column++;
-			}								
-		}
-	}
-}
-
-function getHorScore(player){
-
-	var totalCells = Number(rows* columns);
-	var bBoardChecked = [];
-	for (var pos = Number(0) ; pos < totalCells ; ++pos){
-		bBoardChecked[pos] = false;
-	}
-
-	for ( var iRow = Number(0) ; iRow < rows; ++iRow){
-		for (var iCol = Number(0) ; iCol < columns ; ++iCol){
-			var iPos = Number(iRow*columns + iCol);
-			var maxPos = Number(iRow*columns+columns);
-			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
-				var pointValue = Number(1);
-				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
-					bBoardChecked[iPos] = true;
-					player.score += pointValue;
-					pointValue++; 
-					iPos++;
+			var currentPos = row+column;
+			value = 0;
+			if (currentPos == player.number) {
+				if ( gameBoard[currentPos] == gameBoard[currentPos -1]) {
+					value++;
 				}
-
+				if ( gameBoard[currentPos] == gameBoard[currentPos+1]) {
+					value++;
+				}
+				if ( gameBoard[currentPos] == gameBoard[currentPos -columns]) {
+					value++;
+				}
+				if ( gameBoard[currentPos] == gameBoard[currentPos -columns - 1]) {
+					value++;
+				}
+				if ( gameBoard[currentPos] == gameBoard[currentPos -columns + 1]) {
+					value++;
+				}
+				if ( gameBoard[currentPos] == gameBoard[currentPos +columns]) {
+					value++;
+				}
+				if ( gameBoard[currentPos] == gameBoard[currentPos +columns - 1]) {
+					value++;
+				}
+				if ( gameBoard[currentPos] == gameBoard[currentPos +columns + 1]) {
+					value++;
+				}
+				player.score += value;
 			}
-
 		}
-
 	}
 }
 
-//loop to go through rows and calculate the player's score
-//needs the player variable, number of rows, and number of columns	
-function getVerticalScores(player) {
-	var totalCells = rows*columns;
-	for (var column = Number(0); column < columns; column++) {
-		for (var row = Number(0); row < totalCells ; row+=rows) {
-			var pointValue = 1;
-			var length = 0;
-			while (gameBoard[column + row] === player.number && row < totalCells) {
-				length++;
-				player.score += pointValue;
-				pointValue++;
-				row+=rows;
-			}
-			if (length === 1) {player.score--;}
-		}
-	}
-}
-
-//loop to go through right diagonal columns and calculate the player's score
-//needs the player variable, number of rows, and number of columns	
-function getRightDiagonalScores(player) {
-	var totalCells = rows*columns;
-	var startingPositions = [0,1,2,3,5,10,15];
-
-	for ( var i = 0 ; i < columns-1; ++i){
-		startingPositions.push(i);
-	}
-
-	for ( var i = columns ; i < totalCells ; i += columns){
-		startingPositions.push(i);
-	}
-
-	startingPositions.forEach(function(start) {
-		for (var position = start; position < totalCells; position += columns+1) {
-			var pointValue = 1;
-			var length = 0;
-			while (gameBoard[position] === player.number && position < totalCells) {
-				length++;
-				player.score += pointValue;
-				pointValue++;
-				position+=columns+1;
-			}
-			if (length === 1) {player.score--;}
-		}
-	});
-}
-
-//loop to go through left diagonal columns and calculate the player's score
-//needs the player variable, number of rows, and number of columns	
-function getLeftDiagonalScores(player) {
-	var totalCells = rows*columns;
-	var startingPositions = [];
-
-	for (var i = 1; i < columns-1; ++i){
-		startingPositions.push(i);
-	}
-
-	for (var i = 2*columns - 1 ; i < totalCells ; i+= columns){
-		startingPositions.push(i);
-	}
-
-	startingPositions.forEach(function(start) {
-		for (var position = start; position < totalCells; position += columns-1) {
-			var pointValue = 1;
-			var length = 0;
-			while (gameBoard[position] === player.number && position < totalCells) {
-				length++;
-				player.score += pointValue;
-				pointValue++;
-				position+=columns-1;
-			}
-			if (length === 1) {player.score--;}
-		}
-	});
-}
 
 function createRequestObject(){
 	var ro;
@@ -411,7 +331,7 @@ function determineWinner() {
         message += "<b>Player 2 Wins!!</b><br/>";
     }
     else if (p3.score > p1.score && p3.score > p2.score){
-        message += "<b>Player 3Wins!!</b><br/>";
+        message += "<b>Player 3 Wins!!</b><br/>";
     }
     else {
         message += "<b>There was a tie!</b><br/>";
@@ -432,7 +352,7 @@ function updateBoard() {
 		}
 	}
 }
-	
+
 function sendTurn(gridPosition) {
 	//Create the XMLHttpRequest Object
 	var xmlhttp;
@@ -462,12 +382,7 @@ function updateScores() {
 	players.forEach(function(player) {
 		player.score = 0;
 
-		getHorScore(player);
-		//Place to do the score update
-		//getHorizontalScores(player);
-		//getVerticalScores(player);
-		//getRightDiagonalScores(player);
-		//getLeftDiagonalScores(player);
+		getScores(player);
 		scoreField =  player.name +"Score";
 		document.getElementById(scoreField).innerHTML = player.score;
 	});
@@ -545,7 +460,7 @@ function quitGame() {
 
 	$(join).prop('disabled', false);
 	$(quit).prop('disabled', true);
-	$(boardSize).removeClass('hidden')
+	$(boardSize).removeClass('hidden');
 }
 
 function squareClicked(clickedObject) {
@@ -568,28 +483,53 @@ function squareClicked(clickedObject) {
 }
 
 $( document ).ready(function() {
+	//fix for bug in FireFox on reload
 	$(join).prop('disabled', false);
 });
 
-/*
-//test function
-$( document ).ready(function() {
+
+//tests
+function test() {
 	//test join button
 	$('join').click();
-	//test quit button
-	$('quit').click();
+	if (gameID == 0) {
+		console.log("Join Error");
+	}
 	
-	//find first square and click
-	document.getElementById('0').click();
-	document.getElementById('1').click();
-	document.getElementById('5').click();
-	document.getElementById('6').click();
-	//call a score update
+	rows = 4;
+	columns = 4;
+	createGameBoard(4,4);
+	createTable(4,4);
+	squareClicked(document.getElementById('0'));
+	
+	gameBoard.forEach(function(position) {
+		if (position == 0) {
+			if (gameBoard[position] != 1) {
+				console.log("Click Error");
+			}
+		}
+		else {
+			if (gameBoard[position] != 0) {
+				console.log("GameBoard Creation Error");
+			}
+		}
+	});
+	
+	gameBoard[1] = 1;
+	gameBoard[15] = 1;
 	updateScores();
+	if (p1.score != 4) {
+		console.log("Scoring Error");
+	}
+	
+	
 	//check if superfluous click detected
 	document.getElementById('0').click();
-});
-*/
+	//should generate an alert box
+	
+	
+}
+
 </script>
 </html>
 

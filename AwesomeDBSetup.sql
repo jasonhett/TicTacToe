@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `AwesomeTicTacToe`.`Game` (
   `lastPos` INT NULL,
   `board_State` VARCHAR(100) NULL,
   `last_Player` INT NULL,
-  `Active` INT NULL,
+  `Active` INT NULL DEFAULT 1,
   PRIMARY KEY (`idGame`),
   UNIQUE INDEX `idGame_UNIQUE` (`idGame` ASC))
 ENGINE = InnoDB;
