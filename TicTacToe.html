@@ -170,11 +170,33 @@ function getHorScore(player){
 					pointValue++; 
 					iPos++;
 				}
-
 			}
-
 		}
+	}
+}
 
+function getVerScore(player){
+
+	var totalCells = Number(rows* columns);
+	var bBoardChecked = [];
+	for (var pos = Number(0) ; pos < totalCells ; ++pos){
+		bBoardChecked[pos] = false;
+	}
+
+	for (var iCol = Number(0) ; iCol < columns ; ++iCol){
+		for ( var iRow = Number(0) ; iRow < rows; ++iRow){
+			var iPos = Number(iRow*columns + iCol);
+			var maxPos = totalCells;
+			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
+				var pointValue = Number(1);
+				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
+					bBoardChecked[iPos] = true;
+					player.score += pointValue;
+					pointValue++; 
+					iPos+=columns;
+				}
+			}
+		}
 	}
 }
 
@@ -460,7 +482,8 @@ function updateScores() {
 	players.forEach(function(player) {
 		player.score = 0;
 
-		getHorScore(player);
+		//getHorScore(player);
+		getVerScore(player);
 		//Place to do the score update
 		//getHorizontalScores(player);
 		//getVerticalScores(player);
