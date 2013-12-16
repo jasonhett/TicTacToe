@@ -327,10 +327,7 @@ function handleHttpResponse() {
 					gameBoard[position] = Number(value);
 					updateBoard();
 				}
-                else if (typeOfRequest === "gameover") {
-                    endofgame();
-                }
-				else if (typeOfRequest === "turn") {
+				else if (typeOfRequest === "turn" || typeOfRequest === "endOfGameTurn"){
 					position = results[1]; 
 					value = results[2];	
 					turn = results[3]; 
@@ -349,6 +346,10 @@ function handleHttpResponse() {
 						message += "<b>Player "+(currentPlayerTurn)+" is placing their piece.</b><br/>";	
 					}
 					document.getElementById("messageCenter").innerHTML = message;
+                    
+                    if (typeOfRequest === "endOfGameTurn"){
+                        endofgame();
+                    }
 				} 
 				else {
 					return;

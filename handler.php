@@ -92,16 +92,15 @@ while(1){
         $play_pos = get_play_pos();
         $play_value = get_play_value();
 
-        $msg = "turn" ."," .$play_pos . "," . $play_value . "," . $turn_count;
-        outputMessage($msg);
+        $msg = "";
 
         if(gameover()){
-            sleep(1);
-            $msg = "gameover";
-            outputMessage($msg);
-            exit();
+            $msg = "endOfGameTurn" ."," .$play_pos . "," . $play_value . "," . $turn_count;
         }
-
+        else {
+            $msg = "turn" ."," .$play_pos . "," . $play_value . "," . $turn_count;
+        }
+        outputMessage($msg);
     }
 
     
