@@ -465,7 +465,7 @@ function handleHttpResponse() {
 					columns = Number(results[1]);
 					rows = Number(results[2]);
 				
-					createTable(columns, rows);
+					createTable(rows, columns);
 					createGameBoard(rows, columns);				
 				
 					var message = "";
