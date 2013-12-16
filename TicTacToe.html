@@ -1,0 +1,762 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://gmpg.org/xfn/11">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script> 
+  
+<!-- Latest compiled and minified CSS -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+table.table-tictactoe td {
+		font-size:48pt;
+		text-align:center;	
+	}
+</style>
+  
+ </head>
+
+<body>
+	<center>
+	<h1>Awesome Tic Tac Toe</h1>
+	</center>
+
+
+
+<div class="col-md-8">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table id = "table-tictactoe" class = "table table-bordered table-tictactoe">
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-4">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table class = "table table-striped">
+				<tr>
+					<th>Player</th>
+					<th>Score</th>
+					<th>Token</th>
+				</tr>
+				<tr>
+					<td>Player 1</td>
+					<td id="p1Score">0</td>
+					<td>X</td>
+				</tr>
+				<tr>
+					<td>Player 2</td>
+					<td id="p2Score">0</td>
+					<td>Y</td>
+				</tr>
+				<tr>
+					<td>Player 3</td>
+					<td id="p3Score">0</td>
+					<td>Z</td>
+				</tr>
+			</table>
+		
+		</div>
+	</div>
+	<div id="boardSize">
+		<fieldset>
+		<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<div class="row-fluid col-md-12">
+					<label class="control-label" for="column">Columns</label>
+					<select class="form-control col-md-8" id="column">
+					  <option>4</option>
+					  <option>5</option>
+					  <option>6</option>
+					  <option>7</option>
+					  <option>8</option>
+					  <option>9</option>
+					  <option>10</option>		  
+					</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="row-fluid col-md-12">
+					<label class="control-label" for="row">Rows</label>
+					<select class="form-control col-md-8" id="row">
+					  <option>4</option>
+					  <option>5</option>
+					  <option>6</option>
+					  <option>7</option>
+					  <option>8</option>
+					  <option>9</option>
+					  <option>10</option>		  
+					</select>
+					</div>
+				</div>
+		</form>
+		</fieldset>
+	</div>
+	<div class="panel panel-default">	
+		<div class="panel-body" style="text-align:center">
+			<button id="join" type="button" class="btn btn-success" onClick="joinGame()">Join Game</button>
+			<button id="quit" type="button" class="btn btn-danger" onClick="quitGame()">Quit Game</button>
+		</div>
+	</div>
+
+	<center><h2>Message Center</h2></center>
+	<div class="panel panel-default">
+		<div class="panel-body" style="text-align:left">
+			<b id="messageCenter">Select rows and columns, then click Join Game to begin playing.</b>
+		</div>
+	</div>	
+</div>
+</body>
+
+<script>
+
+//initialize game parameters, still need to be set on join
+var playerNum = 1;
+var gamePiece = "X";
+var gameID = 0;
+var previousResponse ="";
+var gameOver = false;
+var currentPlayerTurn = 1;
+
+//array representing gameBoard
+var gameBoard;
+var cellLookedAt;
+var rows;
+var columns;
+
+var p1 = { name: "p1", number: Number(1), score: Number(0)};
+var p2 = { name: "p2", number: Number(2), score: Number(0)};
+var p3 = { name: "p3", number: Number(3), score: Number(0)};
+
+
+//loop to go through columns and calculate the player's score
+//needs the player variable, number of rows, and number of columns			  
+function getHorizontalScores(player) {
+	var totalCells = rows*columns;
+	for (var row = Number(0); row < rows; row ++) {
+		for (var column = Number(0); column < totalCells ; column += columns) {
+			var pointValue = 1;
+			while (gameBoard[row + column] === player.number && column <= columns) {
+				player.score += pointValue;
+				pointValue++;
+				column++;
+			}								
+		}
+	}
+}
+
+function countSingleTileScore(player){
+	var totalCells = Number(rows* columns);
+
+	for ( var iRow = Number(0) ; iRow < rows; ++iRow){
+		for (var iCol = Number(0) ; iCol < columns ; ++iCol){
+			var iPos = Number(iRow*columns + iCol);
+			if(player.number == gameBoard[iPos]){
+				if(isTileSingle(iPos,iCol,iRow))
+					player.score += 1;
+			}
+		}
+	}
+}
+
+function isTileSingle(iPos,iCol,iRow){
+
+	totalCells = Number(rows*columns);
+	if(iCol != Number(0) && gameBoard[iPos-1] == gameBoard[iPos])
+		return false;
+
+	if(iRow != Number(0) && gameBoard[iPos- columns ] == gameBoard[iPos])
+		return false;
+
+	if(iCol != columns-1 && gameBoard[iPos+1] == gameBoard[iPos])
+		return false;
+
+	if(iRow != rows-1 && gameBoard[iPos+columns] == gameBoard[iPos])
+		return false;
+
+	if( (iPos - (columns + 1) >= 0 ) && gameBoard[iPos - (columns + 1 ) ] == gameBoard[iPos]){
+		return false;
+	}
+
+	if( (iPos + (columns + 1) <  totalCells ) && gameBoard[iPos + (columns + 1 ) ] == gameBoard[iPos])
+		return false;
+
+	if( (iPos - (columns - 1) >= 0 ) && gameBoard[iPos - (columns - 1 ) ] == gameBoard[iPos])
+		return false;
+
+	if( (iPos + (columns - 1) < totalCells ) && gameBoard[iPos + (columns - 1 ) ] == gameBoard[iPos])
+		return false;
+
+	return true;
+}
+
+function getHorScore(player){
+
+	var totalCells = Number(rows* columns);
+	var bBoardChecked = [];
+	for (var pos = Number(0) ; pos < totalCells ; ++pos){
+		bBoardChecked[pos] = false;
+	}
+
+	for ( var iRow = Number(0) ; iRow < rows; ++iRow){
+		for (var iCol = Number(0) ; iCol < columns ; ++iCol){
+			var iPos = Number(iRow*columns + iCol);
+			var maxPos = Number(iRow*columns+columns);
+			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
+				var pointValue = Number(1);
+				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
+					bBoardChecked[iPos] = true;
+					cellLookedAt[iPos] = true;
+
+					if((cellLookedAt[iPos] && pointValue == Number(1) )){
+						if((iPos+Number(1) < maxPos)&&gameBoard[iPos] == gameBoard[iPos+1]){
+							player.score+=pointValue;
+						}
+					}
+					else{
+						player.score += pointValue;
+					}
+					
+					pointValue++; 
+					iPos++;
+				}
+			}
+		}
+	}
+}
+
+function getVerScore(player){
+
+	var totalCells = Number(rows* columns);
+	var bBoardChecked = [];
+	for (var pos = Number(0) ; pos < totalCells ; ++pos){
+		bBoardChecked[pos] = false;
+	}
+
+	for (var iCol = Number(0) ; iCol < columns ; ++iCol){
+		for ( var iRow = Number(0) ; iRow < rows; ++iRow){
+			var iPos = Number(iRow*columns + iCol);
+			var maxPos = totalCells;
+			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
+				var pointValue = Number(1);
+				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
+					bBoardChecked[iPos] = true;
+
+					cellLookedAt[iPos] = true;
+					if( (cellLookedAt[iPos] && pointValue == Number(1) )){
+						if((iPos+columns < totalCells)&&gameBoard[iPos] == gameBoard[iPos+columns]){
+							player.score+=pointValue;
+						}
+					}
+					else{
+						player.score += pointValue;
+					}
+					
+					pointValue++; 
+					iPos+=columns;
+				}
+			}
+		}
+	}
+}
+
+function getRightDiagScore(player){
+
+	var totalCells = Number(rows* columns);
+	var bBoardChecked = [];
+	for (var pos = Number(0) ; pos < totalCells ; ++pos){
+		bBoardChecked[pos] = false;
+	}
+	
+	for ( var iRow = Number(0) ; iRow < rows; ++iRow){
+		for (var iCol = Number(0) ; iCol < columns ; ++iCol){
+			var iPos = Number(iRow*columns + iCol);
+			var maxPos = totalCells;
+			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
+				var pointValue = Number(1);
+				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
+					bBoardChecked[iPos] = true;
+
+					cellLookedAt[iPos] = true;
+
+					if((cellLookedAt[iPos] && pointValue == Number(1) )){
+						if((iPos+columns+Number(1) < maxPos)&&gameBoard[iPos] == gameBoard[iPos+columns+ Number(1)]){
+							player.score+=pointValue;
+						}
+					}
+					else{
+						player.score += pointValue;
+					}
+
+					pointValue++; 
+					iPos= iPos +columns+Number(1);
+				}
+			}
+		}
+	}
+	
+}
+
+function getLeftDiagScore(player){
+
+	var totalCells = Number(rows* columns);
+	var bBoardChecked = [];
+	for (var pos = Number(0) ; pos < totalCells ; ++pos){
+		bBoardChecked[pos] = false;
+	}
+	
+	for ( var iRow = Number(0) ; iRow < rows; ++iRow){
+		for (var iCol = Number(0) ; iCol < columns ; ++iCol){
+			var iPos = Number(iRow*columns + iCol);
+			var maxPos = totalCells;
+			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
+				var pointValue = Number(1);
+				while(bBoardChecked[iPos] == false && gameBoard[iPos] === player.number && iPos < maxPos){
+					bBoardChecked[iPos] = true;
+					
+					cellLookedAt[iPos] = true;
+
+					if((cellLookedAt[iPos] && pointValue == Number(1) )){
+						if((iPos+columns-Number(1) < maxPos)&&gameBoard[iPos] == gameBoard[iPos+columns- Number(1)]){
+							player.score+=pointValue;
+						}
+					}
+					else{
+						player.score += pointValue;
+					}
+
+					pointValue++; 
+					iPos= iPos +columns-Number(1);
+				}
+			}
+		}
+	}
+}
+
+//loop to go through rows and calculate the player's score
+//needs the player variable, number of rows, and number of columns	
+function getVerticalScores(player) {
+	var totalCells = rows*columns;
+	for (var column = Number(0); column < columns; column++) {
+		for (var row = Number(0); row < totalCells ; row+=rows) {
+			var pointValue = 1;
+			var length = 0;
+			while (gameBoard[column + row] === player.number && row < totalCells) {
+				length++;
+				player.score += pointValue;
+				pointValue++;
+				row+=rows;
+			}
+			if (length === 1) {player.score--;}
+		}
+	}
+}
+
+//loop to go through right diagonal columns and calculate the player's score
+//needs the player variable, number of rows, and number of columns	
+function getRightDiagonalScores(player) {
+	var totalCells = rows*columns;
+	var startingPositions = [0,1,2,3,5,10,15];
+
+	for ( var i = 0 ; i < columns-1; ++i){
+		startingPositions.push(i);
+	}
+
+	for ( var i = columns ; i < totalCells ; i += columns){
+		startingPositions.push(i);
+	}
+
+	startingPositions.forEach(function(start) {
+		for (var position = start; position < totalCells; position += columns+1) {
+			var pointValue = 1;
+			var length = 0;
+			while (gameBoard[position] === player.number && position < totalCells) {
+				length++;
+				player.score += pointValue;
+				pointValue++;
+				position+=columns+1;
+			}
+			if (length === 1) {player.score--;}
+		}
+	});
+}
+
+//loop to go through left diagonal columns and calculate the player's score
+//needs the player variable, number of rows, and number of columns	
+function getLeftDiagonalScores(player) {
+	var totalCells = rows*columns;
+	var startingPositions = [];
+
+	for (var i = 1; i < columns-1; ++i){
+		startingPositions.push(i);
+	}
+
+	for (var i = 2*columns - 1 ; i < totalCells ; i+= columns){
+		startingPositions.push(i);
+	}
+
+	startingPositions.forEach(function(start) {
+		for (var position = start; position < totalCells; position += columns-1) {
+			var pointValue = 1;
+			var length = 0;
+			while (gameBoard[position] === player.number && position < totalCells) {
+				length++;
+				player.score += pointValue;
+				pointValue++;
+				position+=columns-1;
+			}
+			if (length === 1) {player.score--;}
+		}
+	});
+}
+
+function createRequestObject(){
+	var ro;
+	if ( window.XMLHttpRequest){
+		ro = new XMLHttpRequest();
+	} else {
+		ro = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+
+	if (!ro)
+		debug("Couldn't start XMLHttpRequest object");
+
+	return ro;
+}
+
+function startProcess(dataUrl){
+	http = createRequestObject();
+	http.open('get',dataUrl);
+	http.onreadystatechange = handleHttpResponse;
+	http.send(null);
+
+	pollTimer = setInterval(handleHttpResponse, 1000);
+
+}
+
+function handleHttpResponse() {
+		//comes in position, value, turnNumber
+		
+		console.log(http);
+		// If data returned
+
+		if ( http.readyState != 4 && http.readyState != 3)
+			return;
+		if ( http.readyState == 3 && http.status != 200)
+			return;
+		if ( http.readyState == 4 && http.status != 200){
+			clearInterval(pollTimer);
+			inProgress = false;
+		}
+
+		if (http.responseText == null)
+			return;
+		
+		//console.log('PrevResponse ' + previousResponse);
+		//consoel.log ('Http Reponsoe ' + http.responseText);
+		if (previousResponse != http.responseText){
+			var outputResponse;
+			console.log('got into spliting msg');
+			outputResponse = http.responseText.replace(previousResponse,'','g');
+			outputResponse = outputResponse.replace('#','', 'g');
+			outputResponse = outputResponse.replace('.','','g');
+
+			console.log('Output' + outputResponse);
+
+		
+			var results = outputResponse.split(",");
+			if (results.length > 1) {	// > 1 normal response (no error)
+				// data from PHP returned in this order
+				var typeOfRequest = results[0];
+				if (typeOfRequest === "start") {
+
+					columns = Number(results[1]);
+					rows = Number(results[2]);
+				
+					createTable(columns, rows);
+					createGameBoard(rows, columns);				
+				
+					var message = "";
+					message += "<b>Gameboard is "+columns+"X"+rows+".</b><br/>";
+					if (playerNum == 1) { 
+						message += "<b>Game is ready. Please place your piece.</b><br/>";
+					}
+					else {
+						message += "<b>Game is ready. Player 1 is placing their piece.</b><br/>";
+					}
+					document.getElementById("messageCenter").innerHTML = message;
+				}
+				else if (typeOfRequest === "playerId") {
+					playerNum = results[1];
+					gameID = results[2];
+					
+					if (playerNum == 1) {
+						gamePiece = "X";
+					}
+					else if (playerNum == 2) {
+						gamePiece = "Y";
+					}
+					else {
+						gamePiece = "Z";
+					}
+				}
+				else if (typeOfRequest === "shutdown") {
+
+				}
+				else if (typeOfRequest === "autoPlay") {
+					//output autoplay message
+					position = results[1]; 
+					value = results[2];	
+					turn = results[3]; 
+					gameBoard[position] = Number(value);
+					updateBoard();
+				}
+				else if (typeOfRequest === "turn" || typeOfRequest === "endOfGameTurn"){
+					position = results[1]; 
+					value = results[2];	
+					turn = results[3]; 
+					
+					gameBoard[position] = Number(value);
+					updateBoard();
+					updateScores();
+					
+					var message = "";
+					message += "<u>Player "+value+" placed their piece.</u><br/>";
+					currentPlayerTurn = (Number(value) + 1) < 4 ? (Number(value)+1) : 1; 
+					if (currentPlayerTurn === playerNum) {	
+						message += "<b>Please place your piece.</b><br/>";
+					}
+					else {
+						message += "<b>Player "+(currentPlayerTurn)+" is placing their piece.</b><br/>";	
+					}
+					document.getElementById("messageCenter").innerHTML = message;
+
+                    if (typeOfRequest === "endOfGameTurn"){
+                        endofgame();
+                    }
+				} 
+				else {
+					return;
+				}
+			}
+			previousResponse = http.responseText;
+		}
+}
+
+function endofgame() {
+
+	gameOver = true;
+    //calc final scores
+    updateScores();
+
+    //determine the winner
+    determineWinner();
+
+}
+
+function determineWinner() {
+    var message = "";
+
+    if (p1.score > p2.score && p1.score > p3.score) {
+        message += "<b>Player 1 Wins!!</b><br/>";
+    }
+    else if (p2.score > p1.score && p2.score > p3.score) {
+        message += "<b>Player 2 Wins!!</b><br/>";
+    }
+    else if (p3.score > p1.score && p3.score > p2.score){
+        message += "<b>Player 3Wins!!</b><br/>";
+    }
+    else {
+        message += "<b>There was a tie!</b><br/>";
+    }
+    document.getElementById("messageCenter").innerHTML = message;
+}
+
+function updateBoard() {
+	for (var position = 0; position < (rows*columns); position++) {
+		if (gameBoard[position] == 1) {
+			document.getElementById(position).innerHTML = "X";
+		}
+		else if (gameBoard[position] == 2) {
+			document.getElementById(position).innerHTML = "Y";
+		}
+		else if (gameBoard[position] == 3) {
+			document.getElementById(position).innerHTML = "Z";
+		}
+	}
+}
+	
+function sendTurn(gridPosition) {
+	//Create the XMLHttpRequest Object
+	var xmlhttp;
+	// error handling
+	if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+	  try {
+		xmlhttp = new XMLHttpRequest();
+	  } catch (e) {
+		xmlhttp = false;
+	  }
+	}
+	xmlhttp;
+	var url = "turn_push.php"
+	var data = "position=" + gridPosition;
+	data += "&value=" + playerNum;
+	data += "&gameId=" + gameID;
+	
+	xmlhttp.open("POST", url, false);  
+	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xmlhttp.send(data);	
+	xmlhttp.onreadystatechange = handleHttpResponse;
+}
+
+function initLookedAt(){
+	cellLookedAt = []
+
+	var totalCells = Number(rows*columns);
+
+	for ( var iPos = Number(0) ; iPos < totalCells ; ++iPos){
+		cellLookedAt[iPos] = false;
+
+	}
+}
+
+function updateScores() {
+	players = [p1, p2, p3];
+	
+	players.forEach(function(player) {
+		player.score = 0;
+
+		initLookedAt();
+		getHorScore(player);
+		getVerScore(player);
+		getRightDiagScore(player);
+		getLeftDiagScore(player);
+		//Place to do the score update
+		//getHorizontalScores(player);
+		//getVerticalScores(player);
+		//getRightDiagonalScores(player);
+		//getLeftDiagonalScores(player);
+
+		countSingleTileScore(player);
+		scoreField =  player.name +"Score";
+		document.getElementById(scoreField).innerHTML = player.score;
+	});
+}
+
+
+
+function joinGame() {
+
+    // error handling
+    var xmlhttp;
+    if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+        try {
+            xmlhttp = new XMLHttpRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
+    }
+
+    http = xmlhttp;
+
+    var data = "colSize=" + $(column).val();
+	data += "&rowSize=" + $(row).val();
+
+    var url = "handler.php";
+    http.open("POST", url , true);
+    http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    http.onreadystatechange = handleHttpResponse;
+	http.send(data);
+	$(join).prop('disabled', true);
+	$(boardSize).addClass('hidden')
+    pollTimer = setInterval(handleHttpResponse, 1000);
+}
+
+function createTable(rows, columns) { 
+	var tableData = "";
+	for (var index = 0; index < rows; index++) {
+		tableData += "<tr id='row"+index+"'>";
+			for (var index2 = 0; index2 < columns; index2++) {
+				tableData += '<td id = "'+(index*columns+index2)+'" onClick="squareClicked(this)" height="100" width="100" ></td>';
+			}
+	}
+	document.getElementById("table-tictactoe").innerHTML = tableData;
+}
+
+function createGameBoard(rows, columns) {
+	var positionsInArray = rows*columns;
+	gameBoard = new Array(positionsInArray);
+	var currentPosition = 0;
+	while (currentPosition < positionsInArray) {
+		gameBoard[currentPosition] = Number(0);
+		currentPosition++;
+	}
+}
+
+function quitGame() {
+	var data = "shutdown";
+    var url = "handler.php";
+    xmlhttp.open("POST", url , true);
+	xmlhttp.send(data);	
+	$(join).prop('disabled', false);
+	$(quit).prop('disabled', true);
+	$(boardSize).removeClass('hidden')
+}
+
+function squareClicked(clickedObject) {
+	if (gameOver === false && Number(playerNum) === currentPlayerTurn) {
+		if (clickedObject.innerHTML < 1) {
+			clickedObject.innerHTML = gamePiece;
+			gameBoard[clickedObject.id] = playerNum;
+			sendTurn(clickedObject.id);
+		}
+		else {
+			alert("Please select a free space.");
+		}
+	}
+	else if(Number(playerNum) !== currentPlayerTurn) {
+		alert("Cannot place piece until it is your turn.");
+	}
+	else {
+		alert("Cannot place another piece until game is reset.");
+	}
+}
+
+$( document ).ready(function() {
+	$(join).prop('disabled', false);
+});
+
+/*
+//test function
+$( document ).ready(function() {
+	//test join button
+	$('join').click();
+	//test quit button
+	$('quit').click();
+	
+	//find first square and click
+	document.getElementById('0').click();
+	document.getElementById('1').click();
+	document.getElementById('5').click();
+	document.getElementById('6').click();
+	//call a score update
+	updateScores();
+	//check if superfluous click detected
+	document.getElementById('0').click();
+});
+*/
+</script>
+</html>
+
+
+
+
+
+
+
