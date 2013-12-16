@@ -150,6 +150,33 @@ function getHorizontalScores(player) {
 	}
 }
 
+function getHorScore(player){
+
+	var totalCells = Number(rows* columns);
+	var bBoardChecked = [];
+	for (var pos = Number(0) ; pos < totalCells ; ++pos){
+		bBoardChecked[pos] = false;
+	}
+
+	for ( var iRow = Number(0) ; iRow < rows; ++iRow){
+		for (var iCol = Number(0) ; iCol < columns ; ++iCol){
+			var iPos = iRow*columns + iCol;
+			if (bBoardChecked[iPos] == false && gameBoard[iPos] === player.number ){
+				var pointValue = Number(1);
+				while(bBoardChecked[iPos] == false){
+					bBoardChecked[iPos] = true;
+					player.score += pointValue;
+					pointValue++; 
+					iPos++;
+				}
+
+			}
+
+		}
+
+	}
+}
+
 //loop to go through rows and calculate the player's score
 //needs the player variable, number of rows, and number of columns	
 function getVerticalScores(player) {
@@ -432,15 +459,18 @@ function updateScores() {
 	players.forEach(function(player) {
 		player.score = 0;
 
+		getHorScore(player);
 		//Place to do the score update
-		getHorizontalScores(player);
-		getVerticalScores(player);
-		getRightDiagonalScores(player);
-		getLeftDiagonalScores(player);
+		//getHorizontalScores(player);
+		//getVerticalScores(player);
+		//getRightDiagonalScores(player);
+		//getLeftDiagonalScores(player);
 		scoreField =  player.name +"Score";
 		document.getElementById(scoreField).innerHTML = player.score;
 	});
 }
+
+
 
 function joinGame() {
 
