@@ -142,33 +142,33 @@ function getScores(player) {
 	for (var row = Number(0); row < rows; row ++) {
 		for (var column = Number(0); column < totalCells ; column += columns) {
 			var currentPos = row+column;
-			value = 0;
-			if (currentPos == player.number) {
+			var pointValue = 0;
+			if (gameBoard[currentPos] == player.number) {
 				if ( gameBoard[currentPos] == gameBoard[currentPos -1]) {
-					value++;
+					pointValue++;
 				}
 				if ( gameBoard[currentPos] == gameBoard[currentPos+1]) {
-					value++;
+					pointValue++;
 				}
 				if ( gameBoard[currentPos] == gameBoard[currentPos -columns]) {
-					value++;
+					pointValue++;
 				}
 				if ( gameBoard[currentPos] == gameBoard[currentPos -columns - 1]) {
-					value++;
+					pointValue++;
 				}
 				if ( gameBoard[currentPos] == gameBoard[currentPos -columns + 1]) {
-					value++;
+					pointValue++;
 				}
 				if ( gameBoard[currentPos] == gameBoard[currentPos +columns]) {
-					value++;
+					pointValue++;
 				}
 				if ( gameBoard[currentPos] == gameBoard[currentPos +columns - 1]) {
-					value++;
+					pointValue++;
 				}
 				if ( gameBoard[currentPos] == gameBoard[currentPos +columns + 1]) {
-					value++;
+					pointValue++;
 				}
-				player.score += value;
+				player.score += pointValue;
 			}
 		}
 	}
@@ -374,6 +374,7 @@ function sendTurn(gridPosition) {
 	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	xmlhttp.send(data);	
 	xmlhttp.onreadystatechange = handleHttpResponse;
+	currentPlayerTurn = (currentPlayerTurn + 1) < 4 ? (currentPlayerTurn+1) : 1; 
 }
 
 function updateScores() {
