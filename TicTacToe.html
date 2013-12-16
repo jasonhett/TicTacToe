@@ -411,7 +411,7 @@ function determineWinner() {
         message += "<b>Player 2 Wins!!</b><br/>";
     }
     else if (p3.score > p1.score && p3.score > p2.score){
-        message += "<b>Player 3Wins!!</b><br/>";
+        message += "<b>Player 3 Wins!!</b><br/>";
     }
     else {
         message += "<b>There was a tie!</b><br/>";
@@ -545,7 +545,7 @@ function quitGame() {
 
 	$(join).prop('disabled', false);
 	$(quit).prop('disabled', true);
-	$(boardSize).removeClass('hidden')
+	$(boardSize).removeClass('hidden');
 }
 
 function squareClicked(clickedObject) {
@@ -568,26 +568,50 @@ function squareClicked(clickedObject) {
 }
 
 $( document ).ready(function() {
+	//fix for bug in FireFox on reload
 	$(join).prop('disabled', false);
 });
 
 /*
-//test function
+//tests
 $( document ).ready(function() {
 	//test join button
 	$('join').click();
-	//test quit button
-	$('quit').click();
+	if (gameID == 0) {
+		console.log("Join Error");
+	}
 	
-	//find first square and click
-	document.getElementById('0').click();
-	document.getElementById('1').click();
-	document.getElementById('5').click();
-	document.getElementById('6').click();
-	//call a score update
+	rows = 4;
+	columns = 4;
+	createGameBoard(4,4);
+	squareClicked(document.getElementById('0'));
+	
+	gameBoard.forEach(function(position) {
+		if (position == 0) {
+			if (gameBoard[position] != 1) {
+				console.log("Click Error");
+			}
+		}
+		else {
+			if (gameBoard[position] != 0) {
+				console.log("GameBoard Creation Error");
+			}
+		}
+	}
+	
+	gameBoard[1] = 1;
+	gameBoard[15] = 1;
 	updateScores();
+	if (p1.score != 4) {
+		console.log("Scoring Error");
+	}
+	
+	
 	//check if superfluous click detected
 	document.getElementById('0').click();
+	//should generate an alert box
+	
+	
 });
 */
 </script>
