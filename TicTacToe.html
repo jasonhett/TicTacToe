@@ -519,8 +519,9 @@ function handleHttpResponse() {
 						message += "<b>Please place your piece.</b><br/>";
 					}
 					else {
-						if(Number(playerNum) == currentPlayerTurn ){
-							message += "<b style="color:red;">Your turn to place a piece on the board!</b>";
+						if(Number(playerNum) == currentPlayerTurn )
+						{
+							message += "<b style=\"color:red;\">Your turn to place a piece on the board!</b>";
 						}
 						else{
 							message += "<b>Player "+(currentPlayerTurn)+" is placing their piece.</b><br/>";	
