@@ -442,7 +442,7 @@ function sendTurn(gridPosition) {
 		xmlhttp = false;
 	  }
 	}
-	xmlhttp;
+	
 	var url = "turn_push.php"
 	var data = "position=" + gridPosition;
 	data += "&value=" + playerNum;
@@ -522,10 +522,25 @@ function createGameBoard(rows, columns) {
 }
 
 function quitGame() {
-	var data = "shutdown";
-    var url = "handler.php";
-    xmlhttp.open("POST", url , true);
+	var xmlhttp;
+	// error handling
+	if (!xmlhttp && typeof XMLHttpRequest != 'undefined') {
+	  try {
+		xmlhttp = new XMLHttpRequest();
+	  } catch (e) {
+		xmlhttp = false;
+	  }
+	}
+
+	var data = "shutdown=" + playerNum;
+	date += "&game" + gameID;
+    var url = "quit.php";
+	
+    xmlhttp.open("POST", url, false);  
+	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	xmlhttp.send(data);	
+	xmlhttp.onreadystatechange = handleHttpResponse;
+
 	$(join).prop('disabled', false);
 	$(quit).prop('disabled', true);
 	$(boardSize).removeClass('hidden')
