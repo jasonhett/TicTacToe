@@ -674,6 +674,7 @@ function createTable(rows, columns) {
 			for (var index2 = 0; index2 < columns; index2++) {
 				tableData += '<td id = "'+(index*columns+index2)+'" onClick="squareClicked(this)" height="100" width="100" ></td>';
 			}
+		tableData += "</tr>";
 	}
 	document.getElementById("table-tictactoe").innerHTML = tableData;
 }
