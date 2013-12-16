@@ -122,6 +122,7 @@ var gamePiece = "X";
 var gameID = 0;
 var previousResponse ="";
 var gameOver = false;
+var currentPlayerTurn;
 
 //array representing gameBoard
 var gameBoard;
@@ -341,8 +342,8 @@ function handleHttpResponse() {
 					
 					var message = "";
 					message += "<u>Player "+value+" placed their piece.</u><br/>";
-					currentPlayerTurn = (value + 1) < 4 ? (value+1) : 1; 
-					if (currentPlayerTurn == playerNum) {	
+					currentPlayerTurn = (Number(value) + 1) < 4 ? (Number(value)+1) : 1; 
+					if (currentPlayerTurn === playerNum) {	
 						message += "<b>Please place your piece.</b><br/>";
 					}
 					else {
@@ -499,7 +500,7 @@ function quitGame() {
 }
 
 function squareClicked(clickedObject) {
-	if (gameOver === false) {
+	if (gameOver === false && Number(playerNum) === currentPlayerTurn) {
 		if (clickedObject.innerHTML < 1) {
 			clickedObject.innerHTML = gamePiece;
 			gameBoard[clickedObject.id] = playerNum;
@@ -508,6 +509,9 @@ function squareClicked(clickedObject) {
 		else {
 			alert("Please select a free space.");
 		}
+	}
+	else if(Number(playerNum) !== currentPlayerTurn) {
+		alert("Cannot place piece until it is your turn.");
 	}
 	else {
 		alert("Cannot place another piece until game is reset.");
